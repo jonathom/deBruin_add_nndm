@@ -8,8 +8,9 @@
 # *****************************************************************************
 
 # ****** load required libraries *******
+.libPaths("/home/j/j_bahl03/R")
 library(ranger)
-library(sperrorest, lib.loc="/home/j/j_bahl03/R")
+library(sperrorest)
 library(parallel)
 
 

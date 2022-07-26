@@ -6,7 +6,7 @@
 # Science and Remote Sensing, email: sytze.debruin@wur.nl
 # May 3, 2022
 # *****************************************************************************
-
+Sys.sleep(round(runif(1, min = 1, max = 240)))
 # ****** load required libraries *******
 .libPaths("/home/j/j_bahl03/R")
 library(ranger)
