@@ -10,10 +10,10 @@
 #SBATCH --mem=140GB
 
 # set a partition
-#SBATCH --partition normal
+#SBATCH --partition express
 
 # set max wallclock time
-#SBATCH --time=02:00:00
+#SBATCH --time=01:30:00
 
 # set name of job
 #SBATCH --job-name=exhaustive_one_iteration
