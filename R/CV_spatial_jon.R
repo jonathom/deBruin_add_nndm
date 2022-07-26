@@ -90,7 +90,8 @@ spatialCV <- function(smpl, number, variate, seed){
 
 
 # ************ CALL THE FUNCTIONS ************ 
-mclapply(seq(n_samp), function(i) {
+# change order to get it done with express partition
+mclapply(order(seq(n_samp), decreasing=TRUE), function(i) {
   for(smpl in samples) {
     spatialCV(smpl, i, "AGB", startseed)
     spatialCV(smpl, i, "OCS", startseed)
