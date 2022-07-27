@@ -58,7 +58,7 @@ terra 1.5.34
 > lastIndex <- runs[nrow(runs),1]
 > thisIndex <- lastIndex + 1
 > print(paste0("this Index is: ", thisIndex))
-[1] "this Index is: 87"
+[1] "this Index is: 88"
 > runs[thisIndex,1] <- thisIndex
 > write.csv(runs, file = csv_file, row.names = FALSE)
 > 
@@ -66,7 +66,146 @@ terra 1.5.34
 > # ****** load input raster data ******
 > msk <- rast(file.path(infolder1, "TOTmask.tif"))
 > AGBstack <- rast(file.path(infolder1, "AGBstack.tif"))
-Error: [rast] cannot open file: ~/deBruin_add_nndm/data/AGBstack.tif
-In addition: Warning message:
-~/deBruin_add_nndm/data/AGBstack.tif: No such file or directory (GDAL error 4) 
-Execution halted
+> OCSstack <- rast(file.path(infolder1, "OCSstack.tif"))
+> 
+> OCt <- rast(file.path(infolder1, "ocs.tif"))
+> AGt <- rast(file.path(infolder1, "agb.tif"))
+> OCS <- mask(OCt, msk, filename="tmpocs.tif", overwrite=T)
+> AGB <- mask(AGt, msk, filename="tmpagb.tif", overwrite=T)
+> rm(AGt, OCt)
+> 
+> 
+> # ************ FUNCTIONS ***************
+> predfun <- function(object, newdata){
++   pred <- predict(object, newdata)
++   pred[[1]]
++ }
+> 
+> mecfu <- function(ref, pred){
++   muref <- global(ref, "mean", na.rm=T)[[1]]
++   residsq <- (ref - pred)^2
++   SSR <- global(residsq, "sum", na.rm=T)[[1]]
++   rm(residsq)
++   residsq <- (ref - muref)^2
++   SST <- global(residsq, "sum", na.rm=T)[[1]]
++   1 - SSR/SST
++ }
+> 
+> rmsefu <- function(ref, pred){
++   residsq <- (ref - pred)^2
++   sqrt(global(residsq, "mean", na.rm=T)[[1]])
++ }
+> 
+> mefu <- function(ref, pred){
++   resmap <- ref - pred
++   global(resmap, "mean", na.rm=T)[[1]]
++ }
+> 
+> exhaustive <- function(smpl, number, variate, seed){
++   
++   fname1 <- paste0(variate, "data", sprintf("%03d", number), ".Rdata")
++   fname2 <- paste0(variate, smpl, sprintf("%03d", number), ".tif")
++   
++   f_in  <- file.path(infolder2,smpl,fname1)
++   f_out <- file.path(outfolder, "exhaustive", fname2)
++   
++   load(f_in)
++   
++   set.seed(seed)
++   
++   if(variate == "AGB"){
++     if (smpl == "clusterGapped") {AGBdata <- AGBdata[,c(2:23)]}
++     RFmodel <- ranger(agb~., AGBdata, 
++                       respect.unordered.factors=TRUE)
++     # print(names(AGBdata[,c(2:23)]))
++     map  <- predict(AGBstack, RFmodel, predfun, filename=f_out, overwrite=T,
++                     na.rm=T)
++     ME   <- mefu(AGB, map)
++     RMSE <- rmsefu(AGB, map)
++     MEC  <- mecfu(AGB, map)
++   } else {
++     if (smpl == "clusterGapped") {OCSdata <- OCSdata[,c(2:23)]}
++     RFmodel <- ranger(ocs~., OCSdata, 
++                       respect.unordered.factors=TRUE)
++     map  <- predict(OCSstack, RFmodel, predfun, filename=f_out, overwrite=T,
++                     na.rm=T)
++     ME   <- mefu(OCS, map)
++     RMSE <- rmsefu(OCS, map)
++     MEC  <- mecfu(OCS, map)
++   }
++   
++   fname <-  paste0(variate, "_", smpl, sprintf("%03d", number), ".Rdata")
++   f_out <- file.path(outfolder,"exhaustive", fname)
++   save(MEC, ME, RMSE, file=f_out)
++ }
+> 
+> 
+> # ************ CALL THE FUNCTIONS ************ 
+> mclapply(list("AGB", "OCS"), function(x) {
++   for(smpl in samples) {
++     i <- thisIndex
++     exhaustive(smpl, i, x, startseed)
++   }
++ }, mc.cores = 2)
+Predicting.. Progress: 11%. Estimated remaining time: 4 minutes, 24 seconds.
+Predicting.. Progress: 29%. Estimated remaining time: 2 minutes, 36 seconds.
+Predicting.. Progress: 46%. Estimated remaining time: 1 minute, 50 seconds.
+Predicting.. Progress: 62%. Estimated remaining time: 1 minute, 19 seconds.
+Predicting.. Progress: 79%. Estimated remaining time: 43 seconds.
+Predicting.. Progress: 95%. Estimated remaining time: 11 seconds.
+Aggregating predictions.. Progress: 24%. Estimated remaining time: 1 minute, 35 seconds.
+Aggregating predictions.. Progress: 49%. Estimated remaining time: 1 minute, 4 seconds.
+Aggregating predictions.. Progress: 74%. Estimated remaining time: 33 seconds.
+Aggregating predictions.. Progress: 98%. Estimated remaining time: 2 seconds.
+Predicting.. Progress: 11%. Estimated remaining time: 4 minutes, 10 seconds.
+Predicting.. Progress: 22%. Estimated remaining time: 3 minutes, 39 seconds.
+Predicting.. Progress: 35%. Estimated remaining time: 2 minutes, 51 seconds.
+Predicting.. Progress: 49%. Estimated remaining time: 2 minutes, 9 seconds.
+Predicting.. Progress: 63%. Estimated remaining time: 1 minute, 30 seconds.
+Predicting.. Progress: 78%. Estimated remaining time: 51 seconds.
+Predicting.. Progress: 92%. Estimated remaining time: 19 seconds.
+Aggregating predictions.. Progress: 18%. Estimated remaining time: 2 minutes, 16 seconds.
+Aggregating predictions.. Progress: 37%. Estimated remaining time: 1 minute, 45 seconds.
+Aggregating predictions.. Progress: 56%. Estimated remaining time: 1 minute, 14 seconds.
+Aggregating predictions.. Progress: 74%. Estimated remaining time: 42 seconds.
+Aggregating predictions.. Progress: 93%. Estimated remaining time: 11 seconds.
+Predicting.. Progress: 11%. Estimated remaining time: 4 minutes, 8 seconds.
+Predicting.. Progress: 29%. Estimated remaining time: 2 minutes, 32 seconds.
+Predicting.. Progress: 49%. Estimated remaining time: 1 minute, 38 seconds.
+Predicting.. Progress: 65%. Estimated remaining time: 1 minute, 7 seconds.
+Predicting.. Progress: 83%. Estimated remaining time: 33 seconds.
+Aggregating predictions.. Progress: 24%. Estimated remaining time: 1 minute, 35 seconds.
+Aggregating predictions.. Progress: 49%. Estimated remaining time: 1 minute, 5 seconds.
+Aggregating predictions.. Progress: 73%. Estimated remaining time: 34 seconds.
+Aggregating predictions.. Progress: 97%. Estimated remaining time: 3 seconds.
+Predicting.. Progress: 15%. Estimated remaining time: 3 minutes, 42 seconds.
+Predicting.. Progress: 34%. Estimated remaining time: 2 minutes, 18 seconds.
+Predicting.. Progress: 50%. Estimated remaining time: 1 minute, 39 seconds.
+Predicting.. Progress: 65%. Estimated remaining time: 1 minute, 10 seconds.
+Predicting.. Progress: 81%. Estimated remaining time: 37 seconds.
+Aggregating predictions.. Progress: 20%. Estimated remaining time: 2 minutes, 6 seconds.
+Aggregating predictions.. Progress: 39%. Estimated remaining time: 1 minute, 35 seconds.
+Aggregating predictions.. Progress: 59%. Estimated remaining time: 1 minute, 4 seconds.
+Aggregating predictions.. Progress: 79%. Estimated remaining time: 33 seconds.
+Aggregating predictions.. Progress: 99%. Estimated remaining time: 2 seconds.
+[[1]]
+[1] "Error in eval(f[[2]], envir = data, enclos = env) : \n  object 'agb' not found\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in eval(f[[2]], envir = data, enclos = env): object 'agb' not found>
+
+[[2]]
+[1] "Error in `[.data.frame`(OCSdata, , c(2:23)) : undefined columns selected\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in `[.data.frame`(OCSdata, , c(2:23)): undefined columns selected>
+
+Warning message:
+In mclapply(list("AGB", "OCS"), function(x) { :
+  all scheduled cores encountered errors in user code
+> 
+> proc.time()
+    user   system  elapsed 
+1416.346   52.139 1800.008 
