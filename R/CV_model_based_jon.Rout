@@ -1,0 +1,109 @@
+
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> current_index <- 1:50
+> # *****************************************************************************
+> # R Script implementing homoscedastic model-based based cross-validation.  
+> # Related to the paper "Dealing with clustered samples for assessing map 
+> # accuracy by cross-validation".
+> # Contact: Sytze de Bruin, Wageningen University, Laboratory of Geo-information
+> # Science and Remote Sensing, email: sytze.debruin@wur.nl
+> # May 3, 2022
+> # *****************************************************************************
+> 
+> # ****** load required libraries *******
+> .libPaths("/home/j/j_bahl03/R")
+> 
+> library(sf)
+Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1; sf_use_s2() is TRUE
+> library(gstat)
+> library(terra)
+terra 1.5.34
+> library(ranger)
+> library(parallel)
+> 
+> 
+> # ************ GLOBALS ***************
+> infolder1 <- "~/deBruin_add_nndm/data"
+> infolder2 <- "~/deBruin_add_nndm/CVresults/random"
+> outfolder <- "~/deBruin_add_nndm/CVresults/modelbased"
+> 
+> # infolder1 <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/data"
+> # infolder2 <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults/random"
+> # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults/modelbased"
+> 
+> nsim <- 300 # number of sequential Gaussian simulations
+> i_CV <- 1:5
+> startseed <- 1234567
+> cores <- 1
+> 
+> 
+> # check whether infolder2 exists; if not, stop
+> if(!dir.exists(infolder2)){
++   cat('First run "CV_random.R"\n\n')
++   stop(paste("directory", infolder2, "does not exist")) 
++ }
+> 
+> # create outfolder if needed
+> if(!dir.exists(outfolder))
++   dir.create(outfolder, recursive=T)
+> 
+> 
+> # ************ FUNCTION ***************
+> 
+> getVgm <- function(pts, i, variate){
++   print(names(pts))
++   fo <- formula(paste0(names(pts)[i],"~1")) # names(pts)[index] flag
++   bnds <- c(1:5 * 5000, 3:20 * 10000)
++   if(variate=="AGB"){
++     vgmod <- vgm(200, "Exp", 40000, add.to = vgm(150, "Sph", 15000, 300))
++   } else {
++     vgmod <- vgm(10, "Exp", 20000, 12)
++   }
++   vg  <- variogram(fo, pts, boundaries=bnds)
++   vgmod <- tryCatch(fit.variogram(vg, vgmod), warning = function(w) w)
++   if (is(vgmod, "warning")){
++     vgmod <- vgm(200, "Exp", 40000, 500)
++     vgmod <- tryCatch(fit.variogram(vg, vgmod), warning = function(w) w)
++     if (is(vgmod, "warning")){
++       vgmod <- vgm(300, "Nug", 0)
++       vgmod <- fit.variogram(vg, vgmod)
++     }
++   }
++   vgmod$range[vgmod$range < 0] <- 1 # last resort
++   return(list(vg, vgmod))
++ }
+> 
+> 
+> 
+> # ************ MAIN ************ 
+> 
+> # simulation grid (fixed)
+> agg_area <- rast(file.path(infolder1, "aggArea.tif"))
+> agg_pnts <- as.points(agg_area)
+> sf_pnts <- st_as_sf(agg_pnts)
+> rm(agg_area)
+> 
+> # covariates on the grid
+> AGBstack <- rast(file.path(infolder1, "AGBstack.tif"))
+Error: [rast] cannot open file: ~/deBruin_add_nndm/data/AGBstack.tif
+In addition: Warning message:
+In new_CppObject_xp(fields$.module, fields$.pointer, ...) :
+  GDAL Error 4: ~/deBruin_add_nndm/data/AGBstack.tif: No such file or directory
+Execution halted
