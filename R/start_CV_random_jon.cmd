@@ -16,7 +16,7 @@
 #SBATCH --time=12:00:00
 
 # set name of job
-#SBATCH --job-name=random_
+#SBATCH --job-name=random_add_nndm
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL

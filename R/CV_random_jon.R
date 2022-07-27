@@ -18,7 +18,7 @@ samples   <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular",
 infolder <- "~/deBruin_add_nndm/samples"
 outfolder <- "~/deBruin_add_nndm/CVresults"
 startseed <- 1234567
-n_CV   <- 5  # number of cross validation replications
+n_CV   <- 3  # number of cross validation replications
 n_samp <- 100  # number of sample replicates (for each design)
 cores <- 20
 

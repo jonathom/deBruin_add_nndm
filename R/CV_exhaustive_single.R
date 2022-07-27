@@ -93,17 +93,15 @@ exhaustive <- function(smpl, number, variate, seed){
   set.seed(seed)
   
   if(variate == "AGB"){
-    if (smpl == "clusterGapped") {AGBdata <- AGBdata[,c(2:23)]}
     RFmodel <- ranger(agb~., AGBdata, 
                       respect.unordered.factors=TRUE)
     # print(names(AGBdata[,c(2:23)]))
-    map  <- predict(AGBstack, RFmodel, predfun, filename=f_out, overwrite=T,
-                    na.rm=T)
+    # map  <- predict(AGBstack, RFmodel, predfun, filename=f_out, overwrite=T, na.rm=T)
+    map  <- predict(AGBstack, RFmodel, predfun, na.rm=T)
     ME   <- mefu(AGB, map)
     RMSE <- rmsefu(AGB, map)
     MEC  <- mecfu(AGB, map)
   } else {
-    if (smpl == "clusterGapped") {OCSdata <- OCSdata[,c(2:23)]}
     RFmodel <- ranger(ocs~., OCSdata, 
                       respect.unordered.factors=TRUE)
     map  <- predict(OCSstack, RFmodel, predfun, filename=f_out, overwrite=T,

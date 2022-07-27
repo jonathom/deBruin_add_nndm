@@ -16,7 +16,7 @@
 #SBATCH --time=12:00:00
 
 # set name of job
-#SBATCH --job-name=spatial_
+#SBATCH --job-name=spatial_add_nndm
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL

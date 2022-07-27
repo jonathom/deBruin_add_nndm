@@ -1,7 +1,7 @@
 setwd("~/iloek_job/wadoux/deBruin_add_nndm/")
 save_to <- "~/iloek_job/wadoux/deBruin_add_nndm/samples"
 samples_root <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/samples/"
-samples <- 1000
+samples <- 700
 
 for (method in c("clusterGapped", "clusterMedium", "simpleRandom", "clusterStrong", "regular")) {
   realizations <- list.files(file.path(samples_root, method), glob2rx("AGBdata*.Rdata"))
