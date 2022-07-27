@@ -13,10 +13,10 @@
 #SBATCH --partition normal
 
 # set max wallclock time
-#SBATCH --time=24:00:00
+#SBATCH --time=48:00:00
 
 # set name of job
-#SBATCH --job-name=model_based_1x1
+#SBATCH --job-name=moba_add_nndm
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL
