@@ -1,4 +1,4 @@
-current_index <- 1:100
+current_index <- 1:50
 # *****************************************************************************
 # R Script implementing homoscedastic model-based based cross-validation.  
 # Related to the paper "Dealing with clustered samples for assessing map 
@@ -27,10 +27,10 @@ outfolder <- "~/deBruin_add_nndm/CVresults/modelbased"
 # infolder2 <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults/random"
 # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults/modelbased"
 
-nsim <- 300 # number of sequential Gaussian simulations
+nsim <- 200 # number of sequential Gaussian simulations
 i_CV <- 1:3
 startseed <- 1234567
-cores <- 2
+cores <- 1
 
 
 # check whether infolder2 exists; if not, stop

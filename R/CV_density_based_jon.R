@@ -26,7 +26,8 @@ outfolder <- "~/investigate_spatial_validation/debruin/CVresults/intensity"
 CRSlaea   <- paste0("+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 ",
                     "+ellps=GRS80 +units=m +no_defs")
 
-n_CV      <- 10 # number of cross validation replications
+n_CV      <- 3 # number of cross validation replications
+cores     <- 20
 
 
 # check whether infolder2 exists; if not, stop
@@ -114,4 +115,4 @@ dum <- mclapply(f_ins, function(f_in) {
   # save output
   save(MEC, RMSE, file=file.path(outfolder, f_out))
   return()
-}, mc.cores=20)
+}, mc.cores=cores)
