@@ -1,0 +1,537 @@
+
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # *****************************************************************************
+> # R Script implementing exhaustive validation, which is used as the reference.  
+> # Related to the paper "Dealing with clustered samples for assessing map 
+> # accuracy by cross-validation".
+> # Contact: Sytze de Bruin, Wageningen University, Laboratory of Geo-information
+> # Science and Remote Sensing, email: sytze.debruin@wur.nl
+> # May 3, 2022
+> # *****************************************************************************
+> # Sys.sleep(round(runif(1, min = 1, max = 240)))
+> # ****** load required libraries *******
+> .libPaths("/home/j/j_bahl03/R")
+> library(ranger)
+> library(terra)
+terra 1.5.34
+> library(parallel)
+> 
+> # ************ GLOBALS ***************
+> samples   <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular", 
++                "simpleRandom")
+> # infolder1 <- "../data"
+> # infolder2 <- "../samples"
+> # outfolder <- "../CVresults"
+> infolder1 <- "~/deBruin_add_nndm/data"
+> infolder2 <- "~/deBruin_add_nndm/samples"
+> outfolder <- "~/deBruin_add_nndm/CVresults"
+> startseed <- 1234567
+> n_samp    <- 100  # number of sample replicates (for each design)
+> cores <- 20
+> 
+> # create outfolders if they don't exist
+> if(!dir.exists(outfolder))
++   dir.create(outfolder)
+> 
+> if(!dir.exists(paste0(outfolder, "/exhaustive")))
++   dir.create(paste0(outfolder, "/exhaustive"))
+> 
+> # csv_file <- file.path(outfolder, "exhaustive", "runs.csv")
+> # runs <- read.csv(csv_file)
+> # lastIndex <- runs[nrow(runs),1]
+> # thisIndex <- lastIndex + 1
+> # print(paste0("this Index is: ", thisIndex))
+> # runs[thisIndex,1] <- thisIndex
+> # write.csv(runs, file = csv_file, row.names = FALSE)
+> 
+> # download data from https://doi.org/10.5281/zenodo.6513429
+> # ****** load input raster data ******
+> msk <- rast(file.path(infolder1, "TOTmask.tif"))
+> AGBstack <- rast(file.path(infolder1, "AGBstack.tif"))
+> OCSstack <- rast(file.path(infolder1, "OCSstack.tif"))
+> 
+> OCt <- rast(file.path(infolder1, "ocs.tif"))
+> AGt <- rast(file.path(infolder1, "agb.tif"))
+> OCS <- mask(OCt, msk, filename="tmpocs.tif", overwrite=T)
+> AGB <- mask(AGt, msk, filename="tmpagb.tif", overwrite=T)
+> rm(AGt, OCt)
+> 
+> 
+> # ************ FUNCTIONS ***************
+> predfun <- function(object, newdata){
++   pred <- predict(object, newdata)
++   pred[[1]]
++ }
+> 
+> mecfu <- function(ref, pred){
++   muref <- global(ref, "mean", na.rm=T)[[1]]
++   residsq <- (ref - pred)^2
++   SSR <- global(residsq, "sum", na.rm=T)[[1]]
++   rm(residsq)
++   residsq <- (ref - muref)^2
++   SST <- global(residsq, "sum", na.rm=T)[[1]]
++   1 - SSR/SST
++ }
+> 
+> rmsefu <- function(ref, pred){
++   residsq <- (ref - pred)^2
++   sqrt(global(residsq, "mean", na.rm=T)[[1]])
++ }
+> 
+> mefu <- function(ref, pred){
++   resmap <- ref - pred
++   global(resmap, "mean", na.rm=T)[[1]]
++ }
+> 
+> exhaustive <- function(smpl, number, variate, seed){
++   
++   fname1 <- paste0(variate, "data", sprintf("%03d", number), ".Rdata")
++   fname2 <- paste0(variate, smpl, sprintf("%03d", number), ".tif")
++   
++   f_in  <- file.path(infolder2,smpl,fname1)
++   f_out <- file.path(outfolder, "exhaustive", fname2)
++   
++   load(f_in)
++   
++   set.seed(seed)
++   
++   if(variate == "AGB"){
++     RFmodel <- ranger(agb~., AGBdata, 
++                       respect.unordered.factors=TRUE)
++     # print(names(AGBdata[,c(2:23)]))
++     # map  <- predict(AGBstack, RFmodel, predfun, filename=f_out, overwrite=T, na.rm=T)
++     map  <- predict(AGBstack, RFmodel, predfun, na.rm=T)
++     ME   <- mefu(AGB, map)
++     RMSE <- rmsefu(AGB, map)
++     MEC  <- mecfu(AGB, map)
++   } else {
++     RFmodel <- ranger(ocs~., OCSdata, 
++                       respect.unordered.factors=TRUE)
++     map  <- predict(OCSstack, RFmodel, predfun, filename=f_out, overwrite=T,
++                     na.rm=T)
++     ME   <- mefu(OCS, map)
++     RMSE <- rmsefu(OCS, map)
++     MEC  <- mecfu(OCS, map)
++   }
++   
++   fname <-  paste0(variate, "_", smpl, sprintf("%03d", number), ".Rdata")
++   f_out <- file.path(outfolder,"exhaustive", fname)
++   save(MEC, ME, RMSE, file=f_out)
++ }
+> 
+> 
+> # ************ CALL THE FUNCTIONS ************ 
+> mclapply(seq(n_samp), function(i) {
++   for(smpl in samples) {
++     exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
++     exhaustive(smpl = smpl, number = i, variate = "OCS", seed = startseed)
++   }
++ }, mc.cores = cores)
+
+ *** caught bus error ***
+address 0x2b484de67720, cause 'non-existent physical address'
+
+ *** caught bus error ***
+
+ *** caught bus error ***
+address 0x2b484de67720, cause 'non-existent physical address'
+address 0x2b484de76e60, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484e2131c8, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484eab4ba0, cause 'non-existent physical address'
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")
+Traceback:
+    } 1:     else prefix <- "Error : ".External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     msg <- paste0(prefix, conditionMessage(e), "\n")    dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",     .Internal(seterrmessage(msg[1L]))        dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,     if (!silent && isTRUE(getOption("show.error.messages"))) {        info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,         cat(msg, file = outFile)    <pointer: 0x6e0bb80>, .pointer, ...)        .Internal(printDeferredWarnings())
+    } 2:     invisible(structure(msg, class = "try-error", condition = e))x@ptr$readValues(row - 1, nrows, col - 1, ncols)})
+
+ 3: 16: .local(x, ...)try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+
+ 4: 17: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+
+ 5: 18: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)FUN(X[[i]], ...)
+
+ 6: 19: .local(object, ...)lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+ *** caught bus error ***
+address 0x2b484eb28ea0, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484de67720, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484deb04a0, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484de76e60, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484de67720, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484e643210, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484de67720, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484de67720, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484de67720, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484de76e60, cause 'non-existent physical address'
+
+ *** caught bus error ***
+address 0x2b484de67720, cause 'non-existent physical address'
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+ *** caught bus error ***
+address 0x2b484deb04a0, cause 'non-existent physical address'
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+ *** caught bus error ***
+address 0x2b484c7fe9b2, cause 'non-existent physical address'
+
+Traceback:
+ 1: selectChildren(ac[!fin], -1)
+ 2: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+An irrecoverable exception occurred. R is aborting now ...
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+An irrecoverable exception occurred. R is aborting now ...
+
+Traceback:
+ 1: .External(list(name = "CppMethod__invoke_notvoid", address = <pointer: 0x25ff500>,     dll = list(name = "Rcpp", path = "/home/j/j_bahl03/R/Rcpp/libs/Rcpp.so",         dynamicLookup = TRUE, handle = <pointer: 0xa029be0>,         info = <pointer: 0x1504ef0>), numParameters = -1L), <pointer: 0x3985600>,     <pointer: 0x6e0bb80>, .pointer, ...)
+ 2: x@ptr$readValues(row - 1, nrows, col - 1, ncols)
+ 3: .local(x, ...)
+ 4: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 5: readValues(object, b$row[i], b$nrows[i], 1, nc, TRUE, TRUE)
+ 6: .local(object, ...)
+ 7: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 8: predict(AGBstack, RFmodel, predfun, na.rm = T)
+ 9: exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
+10: FUN(X[[i]], ...)
+11: lapply(X = S, FUN = FUN, ...)
+12: doTryCatch(return(expr), name, parentenv, handler)
+13: tryCatchOne(expr, names, parentenv, handlers[[1L]])
+14: tryCatchList(expr, classes, parentenv, handlers)
+15: tryCatch(expr, error = function(e) {    call <- conditionCall(e)    if (!is.null(call)) {        if (identical(call[[1L]], quote(doTryCatch)))             call <- sys.call(-4L)        dcall <- deparse(call)[1L]        prefix <- paste("Error in", dcall, ": ")        LONG <- 75L        sm <- strsplit(conditionMessage(e), "\n")[[1L]]        w <- 14L + nchar(dcall, type = "w") + nchar(sm[1L], type = "w")        if (is.na(w))             w <- 14L + nchar(dcall, type = "b") + nchar(sm[1L],                 type = "b")        if (w > LONG)             prefix <- paste0(prefix, "\n  ")    }    else prefix <- "Error : "    msg <- paste0(prefix, conditionMessage(e), "\n")    .Internal(seterrmessage(msg[1L]))    if (!silent && isTRUE(getOption("show.error.messages"))) {        cat(msg, file = outFile)        .Internal(printDeferredWarnings())    }    invisible(structure(msg, class = "try-error", condition = e))})
+16: try(lapply(X = S, FUN = FUN, ...), silent = TRUE)
+17: sendMaster(try(lapply(X = S, FUN = FUN, ...), silent = TRUE))
+18: FUN(X[[i]], ...)
+19: lapply(seq_len(cores), inner.do)
+20: mclapply(seq(n_samp), function(i) {    for (smpl in samples) {        exhaustive(smpl = smpl, number = i, variate = "AGB",             seed = startseed)        exhaustive(smpl = smpl, number = i, variate = "OCS",             seed = startseed)    }}, mc.cores = cores)
+An irrecoverable exception occurred. R is aborting now ...
