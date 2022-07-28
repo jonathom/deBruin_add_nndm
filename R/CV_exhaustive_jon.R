@@ -121,6 +121,6 @@ exhaustive <- function(smpl, number, variate, seed){
 mclapply(seq(n_samp), function(i) {
   for(smpl in samples) {
     exhaustive(smpl = smpl, number = i, variate = "AGB", seed = startseed)
-    exhaustive(smpl = smpl, number = i, variate = "OCS", seed = startseed)
+    # exhaustive(smpl = smpl, number = i, variate = "OCS", seed = startseed)
   }
 }, mc.cores = cores)
