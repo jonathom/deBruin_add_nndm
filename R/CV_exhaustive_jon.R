@@ -96,8 +96,8 @@ exhaustive <- function(smpl, number, variate, seed){
     RFmodel <- ranger(agb~., AGBdata, 
                       respect.unordered.factors=TRUE)
     # print(names(AGBdata[,c(2:23)]))
-    # map  <- predict(AGBstack, RFmodel, predfun, filename=f_out, overwrite=T, na.rm=T)
-    map  <- predict(AGBstack, RFmodel, predfun, na.rm=T)
+    map  <- predict(AGBstack, RFmodel, predfun, filename=f_out, overwrite=T, na.rm=T)
+    # map  <- predict(AGBstack, RFmodel, predfun, na.rm=T)
     ME   <- mefu(AGB, map)
     RMSE <- rmsefu(AGB, map)
     MEC  <- mecfu(AGB, map)
@@ -112,8 +112,9 @@ exhaustive <- function(smpl, number, variate, seed){
   }
   
   fname <-  paste0(variate, "_", smpl, sprintf("%03d", number), ".Rdata")
-  f_out <- file.path(outfolder,"exhaustive", fname)
-  save(MEC, ME, RMSE, file=f_out)
+  f_out2 <- file.path(outfolder,"exhaustive", fname)
+  save(MEC, ME, RMSE, file=f_out2)
+  file.remove(f_out) # remove tif
 }
 
 
