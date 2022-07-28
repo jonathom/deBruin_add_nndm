@@ -112,8 +112,9 @@ exhaustive <- function(smpl, number, variate, seed){
   }
   
   fname <-  paste0(variate, "_", smpl, sprintf("%03d", number), ".Rdata")
-  f_out <- file.path(outfolder,"exhaustive", fname)
-  save(MEC, ME, RMSE, file=f_out)
+  f_out2 <- file.path(outfolder,"exhaustive", fname)
+  save(MEC, ME, RMSE, file=f_out2)
+  file.remove(f_out)
 }
 
 
