@@ -4,19 +4,19 @@
 #SBATCH --nodes=1
 
 # set the number of CPU cores per node
-#SBATCH --ntasks-per-node 20
+#SBATCH --ntasks-per-node 2
 
 # How much memory is needed (per node)
 #SBATCH --mem=140GB
 
 # set a partition
-#SBATCH --partition normal
+#SBATCH --partition express
 
 # set max wallclock time
-#SBATCH --time=90:00:00
+#SBATCH --time=01:30:00
 
 # set name of job
-#SBATCH --job-name=exhaustive_all_add_nndm
+#SBATCH --job-name=exhaustive_test_express
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL

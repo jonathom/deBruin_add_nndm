@@ -2,4 +2,5 @@
 The following have been reloaded with a version change:
   1) palma/2019a => palma/2020b
 
-slurmstepd: error: Detected 3 oom-kill event(s) in StepId=12077868.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.
+slurmstepd: error: *** JOB 12078658 ON r07n03 CANCELLED AT 2022-07-28T11:31:38 ***
+slurmstepd: error: *** JOB 12078650 ON r08n28 CANCELLED AT 2022-07-28T11:46:45 ***

@@ -24,7 +24,7 @@ infolder2 <- "~/deBruin_add_nndm/samples"
 outfolder <- "~/deBruin_add_nndm/CVresults"
 startseed <- 1234567
 n_samp    <- 100  # number of sample replicates (for each design)
-cores <- 20
+cores <- 1
 
 # create outfolders if they don't exist
 if(!dir.exists(outfolder))
