@@ -17,7 +17,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> current_index <- 1:50
+> current_index <- 1:100
 > # *****************************************************************************
 > # R Script implementing homoscedastic model-based based cross-validation.  
 > # Related to the paper "Dealing with clustered samples for assessing map 
@@ -49,9 +49,9 @@ terra 1.5.34
 > # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults/modelbased"
 > 
 > nsim <- 300 # number of sequential Gaussian simulations
-> i_CV <- 1:5
+> i_CV <- 1:3
 > startseed <- 1234567
-> cores <- 1
+> cores <- 2
 > 
 > 
 > # check whether infolder2 exists; if not, stop
@@ -187,225 +187,9 @@ Error in (function (x)  : attempt to apply non-function
 +   save(RMSEs, MECs, vgs, RFmodel, file = file.path(outfolder, f_out))
 +   
 + }, mc.cores=cores)
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
+[1] "res001"   "res002"   "res003"   "geometry"
+[1] "res001"   "res002"   "res003"   "geometry"
 drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
 drawing 300 GLS realisations of beta...
 [using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
-[using conditional Gaussian simulation]
-[1] "res001"   "res002"   "res003"   "res004"   "res005"   "geometry"
-drawing 300 GLS realisations of beta...
 [using conditional Gaussian simulation]

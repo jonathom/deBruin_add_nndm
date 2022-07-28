@@ -2,5 +2,4 @@
 The following have been reloaded with a version change:
   1) palma/2019a => palma/2020b
 
-/Applic.HPC/Easybuild/skylake/2020b/software/R/4.0.3-foss-2020b/lib64/R/bin/BATCH: line 60: 251014 Bus error               ${R_HOME}/bin/R -f ${in} ${opts} ${R_BATCH_OPTIONS} > ${out} 2>&1
-slurmstepd: error: Detected 887 oom-kill event(s) in StepId=12077687.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.
+slurmstepd: error: Detected 3 oom-kill event(s) in StepId=12077868.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.
