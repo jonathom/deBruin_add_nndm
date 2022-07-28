@@ -16,7 +16,7 @@
 #SBATCH --time=01:30:00
 
 # set name of job
-#SBATCH --job-name=exhaustive_one
+#SBATCH --job-name=exh_one
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL
