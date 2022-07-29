@@ -16,7 +16,7 @@
 #SBATCH --time=01:30:00
 
 # set name of job
-#SBATCH --job-name=debruin_density_test
+#SBATCH --job-name=density_add_nndm
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL
