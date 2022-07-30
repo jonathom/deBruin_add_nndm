@@ -1,4 +1,4 @@
-current_index <- 951:1000
+current_index <- 401:450
 # *****************************************************************************
 # R Script implementing homoscedastic model-based based cross-validation.  
 # Related to the paper "Dealing with clustered samples for assessing map 

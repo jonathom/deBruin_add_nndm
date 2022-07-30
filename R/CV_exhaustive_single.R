@@ -53,7 +53,7 @@ OCS <- mask(OCt, msk, filename="tmpocs.tif", overwrite=T)
 AGB <- mask(AGt, msk, filename="tmpagb.tif", overwrite=T)
 rm(AGt, OCt)
 
-
+thisIndex <- 100
 # ************ FUNCTIONS ***************
 predfun <- function(object, newdata){
   pred <- predict(object, newdata)
