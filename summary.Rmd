@@ -75,7 +75,7 @@ infolder  <- "./CVresults"
 outfolder <- "./material"
 
 mets <- c("exhaustive", "random", "spatial", "intensity",
-          "modelbased", "heteroscedastic", "nndm_single")
+          "modelbased", "heteroscedastic", "nndm")
 
 colnms <- c("method", "variate", "design", "number", "RMSE", "MEC")
 outtab <- data.frame(matrix(NA, 0, 10))
