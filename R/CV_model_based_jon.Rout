@@ -17,7 +17,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> current_index <- 1:50
+> current_index <- 951:1000
 > # *****************************************************************************
 > # R Script implementing homoscedastic model-based based cross-validation.  
 > # Related to the paper "Dealing with clustered samples for assessing map 
@@ -791,4 +791,5 @@ NULL
 > 
 > proc.time()
      user    system   elapsed 
-79998.688   338.383 40994.643 
+95046.980   464.057 49312.072 
+ 
