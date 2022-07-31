@@ -144,7 +144,8 @@ mytab$method[mytab$method == "random"] <- "b_random"
 mytab$method[mytab$method == "spatial"] <- "c_spatial"
 mytab$method[mytab$method == "intensity"] <- "d_intensity"
 mytab$method[mytab$method == "modelbased"] <- "e_modelbased"
-mytab$method[mytab$method == "nndm"] <- "f_nndm"
+mytab$method[mytab$method == "heteroscedastic"] <- "f_heteroscedastic"
+mytab$method[mytab$method == "nndm"] <- "g_nndm"
 
 
 

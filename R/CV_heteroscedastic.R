@@ -19,7 +19,7 @@ library(parallel)
 # ************ GLOBALS ***************
 
 infolder1 <- "~/deBruin_add_nndm/CVresults/modelbased"
-infolder2 <- "~/deBruin_add_nndm/CVresults/clusterGapped"
+infolder2 <- "~/deBruin_add_nndm/CVresults/random"
 infolder3 <- "~/deBruin_add_nndm/data"
 outfolder <- "~/deBruin_add_nndm/CVresults/heteroscedastic"
 nsim <- 200        # number of sequential Gaussian simulations
@@ -114,7 +114,7 @@ COVdata <- COVdata[-nanID,]
 sf_pnts <- sf_pnts[-nanID,]
 
 # find files with all design realizations
-f_ins <- list.files(infolder2, glob2rx("ptsAGB_simpleRandom???.Rdata")) # formerly pts???
+f_ins <- list.files(infolder2, glob2rx("ptsAGB_clusterGapped???.Rdata")) # formerly pts???
 f_ins <- f_ins[thisIndex]
 # loop over all files
 
