@@ -30,4 +30,4 @@
 # run the application
 module add palma/2020b
 module add foss R GDAL
-R CMD BATCH --vanilla CV_heteroscedastic_jon.R
+R CMD BATCH --vanilla CV_heteroscedastic.R

@@ -14,14 +14,14 @@ library(gstat)
 library(terra)
 library(ranger)
 library(spatstat)
-
+library(parallel)
 
 # ************ GLOBALS ***************
 
-infolder1 <- "~/emodi/CVresults/modelbased"
-infolder2 <- "~/emodi/CVresults/random"
-infolder3 <- "~/emodi/data"
-outfolder <- "~/emodi/CVresults/heteroscedastic"
+infolder1 <- "~/deBruin_add_nndm/CVresults/modelbased"
+infolder2 <- "~/deBruin_add_nndm/CVresults/random"
+infolder3 <- "~/deBruin_add_nndm/data"
+outfolder <- "~/deBruin_add_nndm/CVresults/heteroscedastic"
 nsim <- 200        # number of sequential Gaussian simulations
 i_CV <- 1:3  # cross validation replications analysed
 startseed <- 1234567
