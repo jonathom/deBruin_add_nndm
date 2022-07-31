@@ -114,8 +114,11 @@ COVdata <- COVdata[-nanID,]
 sf_pnts <- sf_pnts[-nanID,]
 
 # find files with all design realizations
-f_ins <- list.files(infolder2, glob2rx("ptsAGB_clusterGapped???.Rdata")) # formerly pts???
-f_ins <- f_ins[thisIndex]
+f_ins <- list.files(infolder2, glob2rx("ptsAGB_clusterMedium???.Rdata")) # formerly pts???
+f_ins <- list(f_ins, list.files(infolder2, glob2rx("ptsAGB_clusterStrong???.Rdata")))
+f_ins <- list(f_ins, list.files(infolder2, glob2rx("ptsAGB_regular???.Rdata")))
+
+f_ins <- f_ins[c(thisIndex, thisIndex+100, thisIndex+200)]
 # loop over all files
 
 mclapply(f_ins, function(f_in) {
@@ -243,8 +246,7 @@ mclapply(f_ins, function(f_in) {
     
   }
   
-  save(RMSEs, MECs, vgs, # loessmods, loessdata, 
-       file = file.path(outfolder, f_out))
+  save(RMSEs, MECs, vgs, file = file.path(outfolder, f_out))
 
 }, mc.cores=cores)
 
