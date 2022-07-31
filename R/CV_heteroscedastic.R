@@ -19,7 +19,7 @@ library(parallel)
 # ************ GLOBALS ***************
 
 infolder1 <- "~/deBruin_add_nndm/CVresults/modelbased"
-infolder2 <- "~/deBruin_add_nndm/CVresults/random"
+infolder2 <- "~/deBruin_add_nndm/CVresults/clusterGapped"
 infolder3 <- "~/deBruin_add_nndm/data"
 outfolder <- "~/deBruin_add_nndm/CVresults/heteroscedastic"
 nsim <- 200        # number of sequential Gaussian simulations
