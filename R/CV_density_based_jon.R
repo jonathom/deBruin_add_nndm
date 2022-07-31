@@ -17,9 +17,9 @@ library(parallel)
 
 # ************ GLOBALS ***************
 
-infolder1 <- "~/investigate_spatial_validation/debruin/data"
-infolder2 <- "~/investigate_spatial_validation/debruin/CVresults/random"
-outfolder <- "~/investigate_spatial_validation/debruin/CVresults/intensity"
+infolder1 <- "~/deBruin_add_nndm/data"
+infolder2 <- "~/deBruin_add_nndm/CVresults/random"
+outfolder <- "~/deBruin_add_nndm/CVresults/intensity"
 # infolder1 <- "../data"
 # infolder2 <- "../CVresults/random"
 # outfolder <- "../CVresults/intensity"
@@ -74,8 +74,8 @@ polbuf <- st_buffer(polbuf,  -2500)
 rm(studarea)
 
 f_ins <- list.files(infolder2, glob2rx("pts*.Rdata"))
-f_ins <- f_ins[1]
-lapply(f_ins, function(f_in) {
+
+mclapply(f_ins, function(f_in) {
   # retrieve strings for naming purposes
   lchar <- nchar(f_in)
   f_out <- substr(f_in, 4, lchar)
@@ -115,4 +115,4 @@ lapply(f_ins, function(f_in) {
   # save output
   save(MEC, RMSE, file=file.path(outfolder, f_out))
   return()
-})
+}, mc.cores = cores)
