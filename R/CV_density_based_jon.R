@@ -74,8 +74,8 @@ polbuf <- st_buffer(polbuf,  -2500)
 rm(studarea)
 
 f_ins <- list.files(infolder2, glob2rx("pts*.Rdata"))
-
-dum <- mclapply(f_ins, function(f_in) {
+f_ins <- f_ins[1]
+lapply(f_ins, function(f_in) {
   # retrieve strings for naming purposes
   lchar <- nchar(f_in)
   f_out <- substr(f_in, 4, lchar)
@@ -108,11 +108,11 @@ dum <- mclapply(f_ins, function(f_in) {
   RMSE <- numeric(n_CV)
   
   for(i in 1:n_CV){
-    MEC[i]  <- weighted.mec(refs, pts_df[,3], w) # pts_df[,i+2]
-    RMSE[i] <- weighted.rmse(pts_df[,3], w) # same
+    MEC[i]  <- weighted.mec(refs, pts_df[,i+2], w) # pts_df[,i+2]
+    RMSE[i] <- weighted.rmse(pts_df[,i+2], w) # same
   }
   
   # save output
   save(MEC, RMSE, file=file.path(outfolder, f_out))
   return()
-}, mc.cores=cores)
+})

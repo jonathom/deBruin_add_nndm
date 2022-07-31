@@ -25,7 +25,7 @@ infolder <- "~/deBruin_add_nndm/samples"
 outfolder <- "~/deBruin_add_nndm/CVresults"
 # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults"
 datafolder <- "~/deBruin_add_nndm/data"
-folder_name <- "nndm_rerun"
+folder_name <- "nndm"
 
 # csv_file <- file.path(outfolder, folder_name, "nndm_processing.csv")
 # runs <- read.csv(csv_file)
@@ -147,7 +147,7 @@ cores <- 20
 
 mclapply(seq(n_samp), function(i) {
   for(smpl in samples) {
-    nndmCV(smpl = smpl, number = i, variate = "AGB")
-    # spatialCV(smpl, i, "OCS", startseed)
+    # nndmCV(smpl = smpl, number = i, variate = "AGB")
+    nndmCV(smpl, i, "OCS")
   }
 }, mc.cores = cores)

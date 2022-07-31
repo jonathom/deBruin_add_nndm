@@ -119,8 +119,8 @@ CRS:           NA
 > rm(studarea)
 > 
 > f_ins <- list.files(infolder2, glob2rx("pts*.Rdata"))
-> 
-> dum <- mclapply(f_ins, function(f_in) {
+> f_ins <- f_ins[1]
+> lapply(f_ins, function(f_in) {
 +   # retrieve strings for naming purposes
 +   lchar <- nchar(f_in)
 +   f_out <- substr(f_in, 4, lchar)
@@ -153,18 +153,15 @@ CRS:           NA
 +   RMSE <- numeric(n_CV)
 +   
 +   for(i in 1:n_CV){
-+     MEC[i]  <- weighted.mec(refs, pts_df[,3], w) # pts_df[,i+2]
-+     RMSE[i] <- weighted.rmse(pts_df[,3], w) # same
++     MEC[i]  <- weighted.mec(refs, pts_df[,i+2], w) # pts_df[,i+2]
++     RMSE[i] <- weighted.rmse(pts_df[,i+2], w) # same
 +   }
 +   
 +   # save output
 +   save(MEC, RMSE, file=file.path(outfolder, f_out))
 +   return()
-+ }, mc.cores=cores)
-Warning message:
-In mclapply(f_ins, function(f_in) { :
-  all scheduled cores encountered errors in user code
-> 
-> proc.time()
-   user  system elapsed 
-169.082  26.033  24.916 
++ })
+Error in weighted.mean.default(ref, w, na.rm = T) : 
+  'x' and 'w' must have the same length
+Calls: lapply ... weighted.mean -> weighted.mean -> weighted.mean.default
+Execution halted
