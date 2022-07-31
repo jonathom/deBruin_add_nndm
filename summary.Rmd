@@ -121,7 +121,7 @@ mytab$rRMSE <- NA
 mytab$rMEC  <- NA
 
 for (design in unique(mytab$design)) {
-  for (number in 1:90) {
+  for (number in 1:100) {
     measurement <- which(mytab$design == design & mytab$number == number)
     validation <- which(mytab$design == design & mytab$number == number & mytab$method == "exhaustive")
     mytab$rRMSE[measurement] <- 100 * (mytab$RMSE[measurement] - mytab$RMSE[validation])/
