@@ -40,7 +40,6 @@ while (found == FALSE && i < 301) {
     found <- TRUE
   }
 }
-
 write.csv(runs, file = csv_file, row.names = FALSE)
 
 # 20000 phi and 0.5 min train

@@ -4,19 +4,19 @@
 #SBATCH --nodes=1
 
 # set the number of CPU cores per node
-#SBATCH --ntasks-per-node 20
+#SBATCH --ntasks-per-node 2
 
 # How much memory is needed (per node)
-#SBATCH --mem=140GB
+#SBATCH --mem=30GB
 
 # set a partition
 #SBATCH --partition normal
 
 # set max wallclock time
-#SBATCH --time=48:00:00
+#SBATCH --time=72:00:00
 
 # set name of job
-#SBATCH --job-name=het_add_nndm
+#SBATCH --job-name=het_add_sngl
 
 # mail alert at start, end and abortion of execution
 #SBATCH --mail-type=ALL

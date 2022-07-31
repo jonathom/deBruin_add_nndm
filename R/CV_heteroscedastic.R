@@ -6,7 +6,7 @@
 # Science and Remote Sensing, email: sytze.debruin@wur.nl
 # May 3, 2022
 # *****************************************************************************
-
+Sys.sleep(round(runif(1, min = 1, max = 240)))
 # ****** load required libraries *******
 .libPaths("/home/j/j_bahl03/R")
 library(sf)
@@ -25,7 +25,16 @@ outfolder <- "~/deBruin_add_nndm/CVresults/heteroscedastic"
 nsim <- 200        # number of sequential Gaussian simulations
 i_CV <- 1:3  # cross validation replications analysed
 startseed <- 1234567
-cores=20
+cores=1
+
+csv_file <- file.path(outfolder, "heteroscedastic", "runs.csv")
+runs <- read.csv(csv_file)
+lastIndex <- runs[nrow(runs),1]
+thisIndex <- lastIndex + 1
+print(paste0("this Index is: ", thisIndex))
+runs[thisIndex,1] <- thisIndex
+write.csv(runs, file = csv_file, row.names = FALSE)
+
 
 # coordinate reference system
 CRSlaea   <- paste0("+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 ",
@@ -105,8 +114,8 @@ COVdata <- COVdata[-nanID,]
 sf_pnts <- sf_pnts[-nanID,]
 
 # find files with all design realizations
-f_ins <- list.files(infolder2, glob2rx("pts???_simpleRandom???.Rdata"))
-
+f_ins <- list.files(infolder2, glob2rx("ptsAGB_simpleRandom???.Rdata")) # formerly pts???
+f_ins <- f_ins[thisIndex]
 # loop over all files
 
 mclapply(f_ins, function(f_in) {
