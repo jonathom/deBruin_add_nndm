@@ -27,7 +27,7 @@ i_CV <- 1:3  # cross validation replications analysed
 startseed <- 1234567
 cores=1
 
-csv_file <- file.path(outfolder, "heteroscedastic", "runs.csv")
+csv_file <- file.path(outfolder, "runs.csv")
 runs <- read.csv(csv_file)
 lastIndex <- runs[nrow(runs),1]
 thisIndex <- lastIndex + 1
