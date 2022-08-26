@@ -1,81 +1,22 @@
----
-title: "DeBruin Summary"
-author: "Jonathan Bahlmann"
-date: '2022-06-23'
-output:   
-  md_document:
-    variant: markdown_github
----
+# Adding NNDM to “Dealing with Clustered Samples …”
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+1.  Reproducing most of the existing methodology with 100 sampling
+    realizations (100 in original study) of 700 points (5000) and 3 CV
+    iterations (100).
 
-```{r comment, echo=F, eval=F}
-# knit to markdown:
-  md_document:
-    variant: markdown_github
-```
-
-# Adding NNDM to "Dealing with Clustered Samples ..."
-
-1. Reproducing most of the existing methodology with 100 sampling realizations (100 in original study) of 700 points (5000) and 3 CV iterations (100).
-
-2. Adding the NNDM CV method.
-
-```{r, echo=F, warning=F, message=F}
-library(sf)
-library(raster)
-library(ggplot2)
-library(ggpubr)
-```
+2.  Adding the NNDM CV method.
 
 ## Sampling Designs
+
 As a reminder: Plotting a randomly chosen sampling design example.
 
-```{r, echo=F}
-# par(mfrow=c(3,2))
-# gdalwarp -tr 5000 5000 -r average agb.tif agb_resamples.tif
-agb <- raster::raster("./data/agb_resampled.tif")
-sample_plots <- lapply(list.files("./samples"), function(dir) {
-  r <- floor(runif(1, 1, 100))
-  # print(paste0(dir, ": plotting the ", r, "th sampling design."))
-  samp_name <- paste0("./samples/", dir, "/", sprintf("%03d", r), "_coords", ".Rdata")
-  load(samp_name)
-  if(class(pts)[1] != "sf") {
-    sample_df <- as.data.frame(pts)
-    sample_sf <- st_as_sf(sample_df, coords = c("x", "y"))
-    st_crs(sample_sf) <- st_crs(agb) # set crs EPSG:3035
-  } else {
-    sample_sf <- pts
-  }
-  
-  agb_df <- as.data.frame(agb, xy=TRUE)
-  
-  m1 <- ggplot() + 
-    geom_raster(data=agb_df, aes(x=x, y=y, fill=agb_resampled)) + 
-    geom_sf(data=sample_sf, shape = 2, size = 0.1) + 
-    theme_light() +
-    scale_fill_gradientn(colours=terrain.colors(10), na.value="transparent") + #, na.value = "transparent") +
-    ggtitle(dir)
-  
-  return(m1)
-}) 
-
-# raster::plot(agb, main = dir)
-# plot(sample_sf, add=TRUE, pch=5, cex=0.1, color="black")
-```
-
-```{r, fig.width=12, fig.height=8, echo=F}
-ggarrange(plotlist=sample_plots,
-          ncol=3, nrow=2, common.legend = T)
-```
+![](summary_files/figure-markdown_github/unnamed-chunk-3-1.png)
 
 ## Gather Result Data
 
 Gather data from their output folders into a dataframe.
 
-```{r, eval=T}
+``` r
 # ************************************************************************
 # ******************************* Figure 9 *******************************
 # ************************************************************************
@@ -122,18 +63,23 @@ for(m in mets){
 write.xlsx(outtab, file.path(outfolder, "outtab100.xlsx"), overwrite = T)
 ```
 
-
-```{r, eval=T}
+``` r
 ggplot(data=outtab[outtab$variate == "AGB",]) +
   geom_boxplot(aes(x=method, y=RMSE, color=design)) +
   ggtitle("AGB: RMSE by CV Method")
+```
 
+![](summary_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+``` r
 ggplot(data=outtab[outtab$variate == "OCS",]) +
   geom_boxplot(aes(x=method, y=RMSE, color=design)) +
   ggtitle("OCS: RMSE by CV Method")
 ```
 
-```{r, eval=T}
+![](summary_files/figure-markdown_github/unnamed-chunk-5-2.png)
+
+``` r
 mytab <- outtab[outtab$variate == "AGB",]
 # mytab <- mytab[mytab$number < 6,]
 mytab$rRMSE <- NA
@@ -169,13 +115,20 @@ mytab$method[mytab$method == "nndm"] <- "g_nndm"
 
 
 levels(as.factor(mytab$design))
+```
 
+    ## [1] "a_simpleRandom"  "b_regular"       "c_clusterMedium" "d_clusterStrong"
+    ## [5] "e_clusterGapped"
+
+``` r
 ggplot(data=mytab[mytab$method != "a_exhaustive",]) +
   geom_boxplot(aes(x=method, y=rRMSE, color=design)) +
   ggtitle("AGB: relative RMSE (%) by CV Method")
 ```
 
-```{r, eval=T}
+![](summary_files/figure-markdown_github/unnamed-chunk-6-1.png)
+
+``` r
 mytab <- outtab[outtab$variate == "OCS",]
 # mytab <- mytab[mytab$number < 6,]
 mytab$rRMSE <- NA
@@ -211,8 +164,17 @@ mytab$method[mytab$method == "nndm"] <- "g_nndm"
 
 
 levels(as.factor(mytab$design))
+```
 
+    ## [1] "a_simpleRandom"  "b_regular"       "c_clusterMedium" "d_clusterStrong"
+    ## [5] "e_clusterGapped"
+
+``` r
 ggplot(data=mytab[mytab$method != "a_exhaustive",]) +
   geom_boxplot(aes(x=method, y=rRMSE, color=design)) +
   ggtitle("OCS: relative RMSE (%) by CV Method")
 ```
+
+    ## Warning: Removed 168 rows containing non-finite values (stat_boxplot).
+
+![](summary_files/figure-markdown_github/unnamed-chunk-7-1.png)
