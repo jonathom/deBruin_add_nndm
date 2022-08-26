@@ -216,3 +216,5 @@ ggplot(data=mytab[mytab$method != "a_exhaustive",]) +
   geom_boxplot(aes(x=method, y=rRMSE, color=design)) +
   ggtitle("OCS: relative RMSE (%) by CV Method")
 ```
+
+* nndm ohne phi aus CAST paket
