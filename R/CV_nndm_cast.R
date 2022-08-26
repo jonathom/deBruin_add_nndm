@@ -14,6 +14,7 @@
 library(ranger)
 # library(NNDM)
 source("~/R/CAST/R/nndm.R")
+source("~/R/CAST/R/plot_geodist.R")
 library(sf)
 library(raster)
 library(caret)

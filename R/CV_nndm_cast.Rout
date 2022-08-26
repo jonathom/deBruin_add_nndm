@@ -1,0 +1,42 @@
+
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # *****************************************************************************
+> # R Script implementing conventional random f-fold cross-validation.  
+> # Related to the paper "Dealing with clustered samples for assessing map 
+> # accuracy by cross-validation".
+> # Contact: Sytze de Bruin, Wageningen University, Laboratory of Geo-information
+> # Science and Remote Sensing, email: sytze.debruin@wur.nl
+> # May 3, 2022
+> # *****************************************************************************
+> 
+> # sleep for random time so multiple jobs dont take the same job out of the csv
+> # Sys.sleep(round(runif(1, min = 1, max = 240)))
+> 
+> # ****** load required library *******
+> library(ranger)
+> # library(NNDM)
+> source("~/R/CAST/R/nndm.R")
+> source("~/R/CAST/R/plot_geodist.R")
+Error in source("~/R/CAST/R/plot_geodist.R") : 
+  ~/R/CAST/R/plot_geodist.R:390:36: unexpected '>'
+389:   sf::sf_use_s2(FALSE)
+390:   sf::st_as_sf(modeldomainextent) |>
+                                        ^
+Execution halted
