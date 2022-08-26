@@ -14,12 +14,49 @@
 library(ranger)
 # library(NNDM)
 source("~/R/CAST/R/nndm.R")
-source("~/R/CAST/R/plot_geodist.R")
+# source("~/R/CAST/R/plot_geodist.R")
 library(sf)
 library(raster)
 library(caret)
 library(parallel)
 source("/home/j/j_bahl03/R/CAST/R/global_validation.R")
+
+sampleFromArea <- function(modeldomain, samplesize, type,variables,sampling){
+  
+  ##### Distance to prediction locations:
+  # regularly spread points (prediction locations):
+  # see https://edzer.github.io/OGH21/
+  if(inherits(modeldomain, "Raster")){
+    if(samplesize>raster::ncell(modeldomain)){
+      samplesize <- raster::ncell(modeldomain)
+      message(paste0("samplesize for new data shouldn't be larger than number of pixels.
+              Samplesize was reduced to ",raster::ncell(modeldomain)))
+    }
+    modeldomainextent <- sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(modeldomain)))
+  }else{
+    modeldomainextent <- modeldomain
+  }
+  
+  sf::sf_use_s2(FALSE)
+  sf::st_as_sf(modeldomainextent) |>
+    sf::st_transform(4326) -> bb
+  methods::as(bb, "Spatial") |>
+    sp::spsample(n =samplesize, type = sampling)  |>
+    sf::st_as_sfc() |>
+    sf::st_set_crs(4326) -> predictionloc
+  
+  
+  predictionloc <- sf::st_as_sf(predictionloc)
+  
+  
+  if(type == "feature"){
+    predictionloc <- sf::st_as_sf(raster::extract(modeldomain, predictionloc, df = TRUE, sp = TRUE))
+    predictionloc <- na.omit(predictionloc)
+  }
+  
+  return(predictionloc)
+  
+}
 
 # ************ GLOBALS ***************
 infolder <- "~/deBruin_add_nndm/samples"
