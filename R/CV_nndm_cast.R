@@ -11,10 +11,12 @@
 # Sys.sleep(round(runif(1, min = 1, max = 240)))
 
 # ****** load required library *******
+.libPaths("~/R")
 library(ranger)
 # library(NNDM)
 source("~/R/CAST/R/nndm.R")
 # source("~/R/CAST/R/plot_geodist.R")
+library(lwgeom)
 library(sf)
 library(raster)
 library(caret)
@@ -60,7 +62,7 @@ sampleFromArea <- function(modeldomain, samplesize, type,variables,sampling){
 
 # ************ GLOBALS ***************
 infolder <- "~/deBruin_add_nndm/samples"
-outfolder <- "~/deBruin_add_nndm/CVresults"
+outfolder <- "~/deBruin_add_nndm/CVresults/"
 # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults"
 datafolder <- "~/deBruin_add_nndm/data"
 folder_name <- "nndm_cast"
