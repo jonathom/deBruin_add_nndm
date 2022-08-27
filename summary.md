@@ -26,7 +26,7 @@ infolder  <- "./CVresults"
 outfolder <- "./material"
 
 mets <- c("exhaustive", "random", "spatial", "intensity",
-          "modelbased", "heteroscedastic", "nndm")
+          "modelbased", "heteroscedastic", "nndm", "nndm_cast")
 
 colnms <- c("method", "variate", "design", "number", "RMSE", "MEC")
 outtab <- data.frame(matrix(NA, 0, 10))
@@ -178,3 +178,5 @@ ggplot(data=mytab[mytab$method != "a_exhaustive",]) +
     ## Warning: Removed 168 rows containing non-finite values (stat_boxplot).
 
 ![](summary_files/figure-markdown_github/unnamed-chunk-7-1.png)
+
+-   nndm ohne phi aus CAST paket

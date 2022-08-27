@@ -2,9 +2,7 @@
 title: "DeBruin Summary"
 author: "Jonathan Bahlmann"
 date: '2022-06-23'
-output:   
-  md_document:
-    variant: markdown_github
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -85,7 +83,7 @@ infolder  <- "./CVresults"
 outfolder <- "./material"
 
 mets <- c("exhaustive", "random", "spatial", "intensity",
-          "modelbased", "heteroscedastic", "nndm")
+          "modelbased", "heteroscedastic", "nndm", "nndm_cast")
 
 colnms <- c("method", "variate", "design", "number", "RMSE", "MEC")
 outtab <- data.frame(matrix(NA, 0, 10))

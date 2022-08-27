@@ -65,7 +65,7 @@ infolder <- "~/deBruin_add_nndm/samples"
 outfolder <- "~/deBruin_add_nndm/CVresults/"
 # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults"
 datafolder <- "~/deBruin_add_nndm/data"
-folder_name <- "nndm_cast"
+folder_name <- "nndm_cast_01"
 
 # csv_file <- file.path(outfolder, folder_name, "nndm_processing.csv")
 # runs <- read.csv(csv_file)
@@ -144,7 +144,7 @@ nndmCV <- function(smpl, number, variate) {
     
     #st_as_sf(raster::rasterToPoints(agb_raster[[1]], spatial = TRUE))
     # nndm <- nndm(tpoints = sample_subset, ppoints = raster_sf, phi = 20000, min_train = 0.5)
-    nndm <- nndm(tpoints = sample_subset, modeldomain = agb_raster, sampling = "random", min_train = 0.5)
+    nndm <- nndm(tpoints = sample_subset, modeldomain = agb_raster, sampling = "random", min_train = 0.1)
     # save(nndm, file="./nndm.Rdata")
     
     # Evaluate RF model using NDM CV
