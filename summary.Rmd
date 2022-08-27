@@ -83,7 +83,8 @@ infolder  <- "./CVresults"
 outfolder <- "./material"
 
 mets <- c("exhaustive", "random", "spatial", "intensity",
-          "modelbased", "heteroscedastic", "nndm", "nndm_cast")
+          "modelbased", "heteroscedastic", "nndm", 
+          "nndm_cast", "nndm_cast_02", "nndm_cast_09")
 
 colnms <- c("method", "variate", "design", "number", "RMSE", "MEC")
 outtab <- data.frame(matrix(NA, 0, 10))
@@ -168,7 +169,7 @@ mytab$method[mytab$method == "nndm"] <- "g_nndm"
 
 levels(as.factor(mytab$design))
 
-ggplot(data=mytab[mytab$method != "a_exhaustive",]) +
+ggplot(data=mytab[(mytab$method != "a_exhaustive" & mytab$method != "b_random" & mytab$method != "c_spatial" & mytab$method != "d_intensity" & mytab$method != "e_modelbased" & mytab$method != "f_heteroscedastic"),]) +
   geom_boxplot(aes(x=method, y=rRMSE, color=design)) +
   ggtitle("AGB: relative RMSE (%) by CV Method")
 ```

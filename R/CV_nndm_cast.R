@@ -14,7 +14,7 @@
 .libPaths("~/R")
 library(ranger)
 # library(NNDM)
-source("~/R/CAST/R/nndm.R")
+source("~/R/NNDM/R/nndm.R")
 # source("~/R/CAST/R/plot_geodist.R")
 library(lwgeom)
 library(sf)
@@ -65,7 +65,7 @@ infolder <- "~/deBruin_add_nndm/samples"
 outfolder <- "~/deBruin_add_nndm/CVresults/"
 # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults"
 datafolder <- "~/deBruin_add_nndm/data"
-folder_name <- "nndm_cast_02"
+folder_name <- "nndm_5000"
 
 # csv_file <- file.path(outfolder, folder_name, "nndm_processing.csv")
 # runs <- read.csv(csv_file)
@@ -137,14 +137,14 @@ nndmCV <- function(smpl, number, variate) {
   
   for(i_CV in 1:n_CV) {
     
-    # raster_subset <- sampleRandom(agb_raster, n, sp=T) # subset raster
-    # raster_sf <- st_as_sf(raster_subset) # as sf
+    raster_subset <- sampleRandom(agb_raster, n, sp=T) # subset raster
+    raster_sf <- st_as_sf(raster_subset) # as sf
     sample_subset <- st_cast(st_sample(sample_sf, n), to = "POINT") # subset sample
     st_crs(sample_subset) <- st_crs(agb_raster) # set crs
     
     #st_as_sf(raster::rasterToPoints(agb_raster[[1]], spatial = TRUE))
-    # nndm <- nndm(tpoints = sample_subset, ppoints = raster_sf, phi = 20000, min_train = 0.5)
-    nndm <- nndm(tpoints = sample_subset, modeldomain = agb_raster, sampling = "random", min_train = 0.2)
+    nndm <- nndm(tpoints = sample_subset, ppoints = raster_sf, phi = 5000, min_train = 0.5) # 20000 in old runs
+    # nndm <- nndm(tpoints = sample_subset, modeldomain = agb_raster, sampling = "random", min_train = 0.2)
     # save(nndm, file="./nndm.Rdata")
     
     # Evaluate RF model using NDM CV
