@@ -65,7 +65,7 @@ infolder <- "~/deBruin_add_nndm/samples"
 outfolder <- "~/deBruin_add_nndm/CVresults/"
 # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults"
 datafolder <- "~/deBruin_add_nndm/data"
-folder_name <- "nndm_5000"
+folder_name <- "nndm_70000"
 
 # csv_file <- file.path(outfolder, folder_name, "nndm_processing.csv")
 # runs <- read.csv(csv_file)
@@ -143,7 +143,7 @@ nndmCV <- function(smpl, number, variate) {
     st_crs(sample_subset) <- st_crs(agb_raster) # set crs
     
     #st_as_sf(raster::rasterToPoints(agb_raster[[1]], spatial = TRUE))
-    nndm <- nndm(tpoints = sample_subset, ppoints = raster_sf, phi = 5000, min_train = 0.5) # 20000 in old runs
+    nndm <- nndm(tpoints = sample_subset, ppoints = raster_sf, phi = 70000, min_train = 0.5) # 20000 in old runs
     # nndm <- nndm(tpoints = sample_subset, modeldomain = agb_raster, sampling = "random", min_train = 0.2)
     # save(nndm, file="./nndm.Rdata")
     
