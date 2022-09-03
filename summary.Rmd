@@ -84,7 +84,7 @@ outfolder <- "./material"
 
 mets <- c("exhaustive", "random", "spatial", "intensity",
           "modelbased", "heteroscedastic", "nndm", 
-          "nndm_cast", "nndm_cast_02", "nndm_cast_09")
+          "nndm_cast", "nndm_cast_02", "nndm_cast_09", "nndm_70000")
 
 colnms <- c("method", "variate", "design", "number", "RMSE", "MEC")
 outtab <- data.frame(matrix(NA, 0, 10))
