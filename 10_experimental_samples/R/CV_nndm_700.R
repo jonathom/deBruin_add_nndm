@@ -162,7 +162,9 @@ samples <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular",
 n_samp <- 10
 cores <- 20
 
-mclapply(seq(n_samp), function(i) {
+# mclapply(seq(n_samp), function(i) {
+# 4 is missing from all results so redo run nr 4
+mclapply(list(4), function(i) {
   for(smpl in samples) {
     nndmCV(smpl = smpl, number = i, variate = "AGB")
     nndmCV(smpl, i, "OCS")
