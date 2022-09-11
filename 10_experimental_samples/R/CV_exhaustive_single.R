@@ -112,9 +112,9 @@ exhaustive <- function(smpl, number, variate, seed){
 
 
 # ************ CALL THE FUNCTIONS ************ 
-mclapply(list("AGB", "OCS"), function(x) {
+lapply(list("AGB", "OCS"), function(x) {
   for(smpl in samples) {
     i <- thisIndex
     exhaustive(smpl, i, x, startseed)
   }
-}, mc.cores = 2)
+})
