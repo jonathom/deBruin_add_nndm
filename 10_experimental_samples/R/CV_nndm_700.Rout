@@ -205,3 +205,21 @@ tpoints and ppoints must have the same CRS. tpoints have been transformed.
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
 1000 prediction points are sampled from the modeldomain
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+[[1]]
+NULL
+
+There were 30 warnings (use warnings() to see them)
+> 
+> proc.time()
+    user   system  elapsed 
+7321.820  232.977 3914.897 
