@@ -296,3 +296,136 @@ tpoints and ppoints must have the same CRS. tpoints have been transformed.
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
 1000 prediction points are sampled from the modeldomain
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+[[3]]
+NULL
+
+[[4]]
+[1] "Error in if (phi < 0 | !is.numeric(phi)) { : \n  missing value where TRUE/FALSE needed\n"
+attr(,"class")
+[1] "try-error"
+attr(,"condition")
+<simpleError in if (phi < 0 | !is.numeric(phi)) {    stop("phi must be positive.")}: missing value where TRUE/FALSE needed>
+
+[[5]]
+NULL
+
+[[6]]
+NULL
+
+[[7]]
+NULL
+
+[[8]]
+NULL
+
+[[9]]
+NULL
+
+[[10]]
+NULL
+
+Warning message:
+In mclapply(seq(n_samp), function(i) { :
+  scheduled core 4 encountered error in user code, all values of the job will be affected
+> 
+> proc.time()
+     user    system   elapsed 
+53894.855  1215.626  6248.359 

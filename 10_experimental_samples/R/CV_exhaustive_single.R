@@ -89,14 +89,16 @@ exhaustive <- function(smpl, number, variate, seed){
   set.seed(seed)
   
   if(variate == "AGB"){
+    if("ID" %in% names(AGBdata)) {AGBdata <- AGBdata[,! names(AGBdata) %in% c("ID")]}
     RFmodel <- ranger(agb~., AGBdata, respect.unordered.factors=TRUE)
-    # print(names(AGBdata[,c(2:23)]))
+    # print(names(AGBdata))
     # map  <- predict(AGBstack, RFmodel, predfun, filename=f_out, overwrite=T, na.rm=T)
     map  <- predict(AGBstack, RFmodel, predfun, na.rm=T)
     ME   <- mefu(AGB, map)
     RMSE <- rmsefu(AGB, map)
     MEC  <- mecfu(AGB, map)
   } else {
+    if("ID" %in% names(OCSdata)) {OCSdata <- OCSdata[,! names(OCSdata) %in% c("ID")]}
     RFmodel <- ranger(ocs~., OCSdata, respect.unordered.factors=TRUE)
     map  <- predict(OCSstack, RFmodel, predfun, na.rm=T) # for file saving see above
     ME   <- mefu(OCS, map)
@@ -112,9 +114,9 @@ exhaustive <- function(smpl, number, variate, seed){
 
 
 # ************ CALL THE FUNCTIONS ************ 
-lapply(list("AGB", "OCS"), function(x) {
+mclapply(list("AGB", "OCS"), function(x) {
   for(smpl in samples) {
     i <- thisIndex
     exhaustive(smpl, i, x, startseed)
   }
-})
+}, mc.cores=2)
