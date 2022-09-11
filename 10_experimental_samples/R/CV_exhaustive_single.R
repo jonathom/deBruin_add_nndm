@@ -20,8 +20,8 @@ samples   <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular",
 # infolder2 <- "../samples"
 # outfolder <- "../CVresults"
 infolder1 <- "~/deBruin_add_nndm/data"
-infolder2 <- "~/deBruin_add_nndm/10_experimental_samples/samples/sampled_700"
-outfolder <- "~/deBruin_add_nndm/10_experimental_samples/CVresults/exhaustive/sampled_700"
+infolder2 <- "~/deBruin_add_nndm/10_experimental_samples/samples/sampled_3000"
+outfolder <- "~/deBruin_add_nndm/10_experimental_samples/CVresults/exhaustive/sampled_3000"
 startseed <- 1234567
 
 
