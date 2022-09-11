@@ -1,3 +1,4 @@
+index_ <- 1
 # *****************************************************************************
 # R Script implementing conventional random f-fold cross-validation.  
 # Related to the paper "Dealing with clustered samples for assessing map 
@@ -160,11 +161,10 @@ nndmCV <- function(smpl, number, variate) {
 samples <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular", 
                "simpleRandom")
 n_samp <- 10
-cores <- 20
+cores <- 2
 
-mclapply(seq(n_samp), function(i) {
+mclapply(list("AGB", "OSC"), function(var_) {
   for(smpl in samples) {
-    nndmCV(smpl = smpl, number = i, variate = "AGB")
-    nndmCV(smpl, i, "OCS")
+    nndmCV(smpl = smpl, number = index_, variate = var_)
   }
 }, mc.cores = cores)

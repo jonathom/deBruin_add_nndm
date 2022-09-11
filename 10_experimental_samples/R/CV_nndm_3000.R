@@ -162,8 +162,8 @@ samples <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular",
                "simpleRandom")
 n_samp <- 10
 
-mclapply(list("AGB", "OCS"), function(var) {
+mclapply(list("AGB", "OCS"), function(var_) {
   for(smpl in samples) {
-    nndmCV(smpl = smpl, number = index_, variate = var)
+    nndmCV(smpl = smpl, number = index_, variate = var_)
   }
 }, mc.cores = 2)
