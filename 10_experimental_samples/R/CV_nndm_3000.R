@@ -160,7 +160,7 @@ nndmCV <- function(smpl, number, variate) {
 samples <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular", 
                "simpleRandom")
 n_samp <- 10
-cores <- 20
+cores <- 10
 
 mclapply(seq(n_samp), function(i) {
   for(smpl in samples) {
