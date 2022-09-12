@@ -1,4 +1,4 @@
-index_ <- 1
+index_ <- 10
 # *****************************************************************************
 # R Script implementing conventional random f-fold cross-validation.  
 # Related to the paper "Dealing with clustered samples for assessing map 
