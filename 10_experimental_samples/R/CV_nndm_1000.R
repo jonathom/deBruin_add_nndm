@@ -22,11 +22,11 @@ library(caret)
 library(parallel)
 
 # ************ GLOBALS ***************
-infolder <- "~/deBruin_add_nndm/10_experimental_samples/samples/sampled_700"
+infolder <- "~/deBruin_add_nndm/10_experimental_samples/samples/sampled_1000"
 outfolder <- "~/deBruin_add_nndm/10_experimental_samples/CVresults/"
 # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults"
 datafolder <- "~/deBruin_add_nndm/data"
-folder_name <- "nndm_sampled700_samps_1000_mint_0"
+folder_name <- "nndm_sampled1000_samps_1000_mint_0"
 
 n_CV <- 1
 
@@ -164,9 +164,14 @@ cores <- 20
 
 # mclapply(seq(n_samp), function(i) {
 # 4 is missing from all results so redo run nr 4
-mclapply(list(4), function(i) {
-  for(smpl in samples) {
-    nndmCV(smpl = smpl, number = i, variate = "AGB")
-    nndmCV(smpl, i, "OCS")
-  }
-}, mc.cores = cores)
+# mclapply(list(4), function(i) {
+#   for(smpl in samples) {
+#     nndmCV(smpl = smpl, number = i, variate = "AGB")
+#     nndmCV(smpl, i, "OCS")
+#   }
+# }, mc.cores = cores)
+
+# do one first
+lapply(samples, function(smpl) {
+  nndmCV(smpl=smpl, number=1, variate="AGB")
+})
