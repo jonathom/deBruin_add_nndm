@@ -241,9 +241,12 @@ Aggregating predictions.. Progress: 50%. Estimated remaining time: 1 minute, 3Pr
 Predicting.. Progress: 26%. Estimated remaining time: 2 minutes, 54 seconds.
 Predicting.. Progress: 4Predicting.. Progress: 11%. Estimated remaining time:Predicting.. Progress: 5Predicting.. Progress: 26%. Estimated remaining timePredicting.. Progress: 7Predicting.. Progress: 40%. Estimated remaining timPredicting.. Progress: 84%Predicting.. Progress: 56%. Estimated reAggregating predictions.. Progress: 20%. Estimated remaining time: 2 minutes, 6 seconds.
 Aggregating predictions.. Progress: 39%. Estimated remaining time: 1 minute, 35 seconds.Aggregating predictions.. Progress: 20%. Estimated remaining time: 2 minutes, 6 seconds.
-Aggregating predictions.. Progress: 39%. Estimated remaining time: 1 minute, 35 seconds.
-: 64%. Estimated remaining time: 52 seconds.
-Aggregating predictions.. Progress: 85%. Estimated remaining time: 21 seconds.
+Aggregating predictions.. Progress: 39%. Estimated remaining time: 1 minute, 35AggregatinAggregating predictions.. Progress: 59%. Estimated remaining time: 1[[1]]
+NULL
+
+[[2]]
+NUAggregating predictions.. Progress: 79%. Estimated remaining time: 33 seconds.
+Aggregating predictions.. Progress: 99%. Estimated remaining time: 1 seconds.
 [[1]]
 NULL
 
@@ -253,4 +256,4 @@ NULL
 > 
 > proc.time()
     user   system  elapsed 
-4079.211  155.224 4535.934 
+4094.047  138.113 4623.636 
