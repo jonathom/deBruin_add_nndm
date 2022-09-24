@@ -40,8 +40,8 @@ terra 1.5.34
 > # infolder2 <- "../samples"
 > # outfolder <- "../CVresults"
 > infolder1 <- "~/deBruin_add_nndm/data"
-> infolder2 <- "~/deBruin_add_nndm/10_experimental_samples/samples/sampled_700"
-> outfolder <- "~/deBruin_add_nndm/10_experimental_samples/CVresults/exhaustive/sampled_700"
+> infolder2 <- "~/deBruin_add_nndm/10_experimental_samples/samples/sampled_1000"
+> outfolder <- "~/deBruin_add_nndm/10_experimental_samples/CVresults/exhaustive/sampled_1000"
 > startseed <- 1234567
 > 
 > 
@@ -141,104 +141,84 @@ terra 1.5.34
 +     i <- thisIndex
 +     exhaustive(smpl, i, x, startseed)
 +   }
-+ }, mc.cores=2)
-Predicting.. Progress: 11%. Estimated remaining time: 4 minutes, 0 seconds.
-Predicting.. Progress: 7%. Estimated remaining time: 8 minutes, 33 seconds.
-Predicting.. Progress: 22%. Estimated remaining time: 4 minutes, 25 seconds.
-Predicting.. Progress: 22%. Estimated remaining time: 4 minutes, 57 seconds.
-Predicting.. Progress: 34%. Estimated remaining time: 3 minutes, 25 seconds.
-Predicting.. Progress: 36%. Estimated remaining time: 3 minutes, 40 seconds.
-Predicting.. Progress: 43%. Estimated remaining time: 3 minutes, 7 seconds.
-Predicting.. Progress: 50%. Estimated remaining time: 2 minutes, 33 seconds.
-Predicting.. Progress: 53%. Estimated remaining time: 2 minutes, 35 seconds.
-Predicting.. Progress: 58%. Estimated remaining time: 2 minutes, 17 seconds.
-Predicting.. Progress: 64%. Estimated remaining time: 1 minute, 56 seconds.
-Predicting.. Progress: 71%. Estimated remaining time: 1 minute, 28 seconds.
-Predicting.. Progress: 72%. Estimated remaining time: 1 minute, 33 seconds.
-Predicting.. Progress: 79%. Estimated remaining time: 1 minute, 6 seconds.
-Predicting.. Progress: 81%. Estimated remaining time: 1 minute, 3 seconds.
-Predicting.. Progress: 91%. Estimated remaining time: 26 seconds.
-Predicting.. Progress: 90%. Estimated remaining time: 32 seconds.
-Aggregating predictions.. Progress: 11%. Estimated remaining time: 3 minutes, 58 seconds.
-Aggregating predictions.. Progress: 11%. Estimated remaining time: 4 minutes, 4 seconds.
-Aggregating predictions.. Progress: 23%. Estimated remaining time: 3 minutes, 29 seconds.
-Aggregating predictions.. Progress: 22%. Estimated remaining time: 3 minutes, 34 seconds.
-Aggregating predictions.. Progress: 34%. Estimated remaining time: 2 minutes, 57 seconds.
-Aggregating predictions.. Progress: 34%. Estimated remaining time: 3 minutes, 4 seconds.
-Aggregating predictions.. Progress: 46%. Estimated remaining time: 2 minutes, 26 seconds.
-Aggregating predictions.. Progress: 45%. Estimated remaining time: 2 minutes, 34 seconds.
-Aggregating predictions.. Progress: 57%. Estimated remaining time: 1 minute, 55 seconds.
-Aggregating predictions.. Progress: 56%. Estimated remaining time: 2 minutes, 3 seconds.
-Aggregating predictions.. Progress: 69%. Estimated remaining time: 1 minute, 24 seconds.
-Aggregating predictions.. Progress: 67%. Estimated remaining time: 1 minute, 32 seconds.
-Aggregating predictions.. Progress: 80%. Estimated remaining time: 53 seconds.
-Aggregating predictions.. Progress: 78%. Estimated remaining time: 1 minute, 1 seconds.
-Aggregating predictions.. Progress: 92%. Estimated remaining time: 22 seconds.
-Aggregating predictions.. Progress: 89%. Estimated remaining time: 30 seconds.
-Predicting.. Progress: 17%. Estimated remaining time: 2 minutes, 38 seconds.
-Predicting.. Progress: 39%. Estimated remaining time: 1 minute, 38 seconds.
-Predicting.. Progress: 60%. Estimated remaining time: 1 minute, 3 seconds.
-Predicting.. Progress: 81%. Estimated remaining time: 29 seconds.
-Aggregating predictions.. Progress: 22%. Estimated remaining time: 1 minute, 50 seconds.
-Aggregating predictions.. Progress: 44%. Estimated remaining time: 1 minute, 17 seconds.
-Aggregating predictions.. Progress: 67%. Estimated remaining time: 46 seconds.
-Aggregating predictions.. Progress: 89%. Estimated remaining time: 15 seconds.
-Predicting.. Progress: 14%. Estimated remaining time: 3 minutes, 16 seconds.
-Predicting.. Progress: 34%. Estimated remaining time: 2 minutes, 3 seconds.
-Predicting.. Progress: 54%. Estimated remaining time: 1 minute, 20 seconds.
-Predicting.. Progress: 73%. Estimated remaining time: 46 seconds.
-Predicting.. Progress: 91%. Estimated remaining time: 14 seconds.
-Aggregating predictions.. Progress: 26%. Estimated remaining time: 1 minute, 29 seconds.
-Aggregating predictions.. Progress: 51%. Estimated remaining time: 58 seconds.
-Aggregating predictions.. Progress: 77%. Estimated remaining time: 27 seconds.
-Predicting.. Progress: 19%. Estimated remaining time: 2 minutes, 15 seconds.
-Predicting.. Progress: 40%. Estimated remaining time: 1 minute, 33 seconds.
-Predicting.. Progress: 63%. Estimated remaining time: 56 seconds.
-Predicting.. Progress: 86%. Estimated remaining time: 19 seconds.
-Aggregating predictions.. Progress: 22%. Estimated remaining time: 1 minute, 47 seconds.
-Aggregating predictions.. Progress: 45%. Estimated remaining time: 1 minute, 16 seconds.
-Aggregating predictions.. Progress: 67%. Estimated remaining time: 45 seconds.
-Aggregating predictions.. Progress: 90%. Estimated remaining time: 14 seconds.
-Predicting.. Progress: 13%. Estimated remaining time: 3 minutes, 20 seconds.
-Predicting.. Progress: 33%. Estimated remaining time: 2 minutes, 3 seconds.
-Predicting.. Progress: 51%. Estimated remaining time: 1 minute, 31 seconds.
-Predicting.. Progress: 71%. Estimated remaining time: 51 seconds.
-Predicting.. Progress: 90%. Estimated remaining time: 17 seconds.
-Aggregating predictions.. Progress: 26%. Estimated remaining time: 1 minute, 30 seconds.
-Aggregating predictions.. Progress: 51%. Estimated remaining time: 1 minute, 0 seconds.
-Aggregating predictions.. Progress: 76%. Estimated remaining time: 28 seconds.
-Predicting.. Progress: 19%. Estimated remaining time: 2 minutes, 28 seconds.
-Predicting.. Progress: 37%. Estimated remaining time: 1 minute, 50 seconds.
-Predicting.. Progress: 58%. Estimated remaining time: 1 minute, 9 seconds.
-Predicting.. Progress: 79%. Estimated remaining time: 34 seconds.
-Aggregating predictions.. Progress: 23%. Estimated remaining time: 1 minute, 46 seconds.
-Aggregating predictions.. Progress: 45%. Estimated remaining time: 1 minute, 14 seconds.
-Aggregating predictions.. Progress: 67%. Estimated remaining time: 44 seconds.
-Aggregating predictions.. Progress: 90%. Estimated remaining time: 13 seconds.
-Predicting.. Progress: 11%. Estimated remaining time: 4 minutes, 18 seconds.
-Predicting.. Progress: 32%. Estimated remaining time: 2 minutes, 16 seconds.
-Predicting.. Progress: 48%. Estimated remaining time: 1 minute, 42 seconds.
-Predicting.. Progress: 66%. Estimated remaining time: 1 minute, 5 seconds.
-Predicting.. Progress: 83%. Estimated remaining time: 32 seconds.
-Aggregating predictions.. Progress: 29%. Estimated remaining time: 1 minute, 17 seconds.
-Aggregating predictions.. Progress: 57%. Estimated remaining time: 46 seconds.
-Aggregating predictions.. Progress: 86%. Estimated remaining time: 15 seconds.
-Predicting.. Progress: 14%. Estimated remaining time: 3 minutes, 16 seconds.
-Predicting.. Progress: 35%. Estimated remaining time: 1 minute, 57 seconds.
++ }, mc.cores=2)PPredicting.. Progress: 11%. Estimated remaining time: 4 minutes, 21 seconds.
+Predicting.. Progress: 28%. Estimated remaining time: 2 minutes, 37 seconds.
+Predicting.. Progress: 45%. Estimated remaining time: 1 minute, 52 seconds.
+Predicting.. Progress: 60%. Estimated remaining time: 1 minute, 21 seconds.
+Predicting.. Progress: 76%. Estimated remaining time: 50 secondAggPredicting.. Progress: 94%. Estimated remaining time: 12 seconds.
+Aggregating predictions.. Progress: 16%. Estimated remaining time: 2 minutes, 41 seconds.
+Aggregating predictions.. Progress: 32%. Estimated remaining time: 2 minutes, 10 seconds.
+Aggregating predictions.. Progress: 48%. Estimated remaining time: 1 minute, 38 seconds.
+Aggregating predictions.. Progress: 57%. Estimated remaining time: 1 minute, 34 seconds.
+Predicting.. Progress: 6%. Estimated remaining time: 8 minutes, 42 seconds.
+Aggregating predictions.. Progress: 65%. Estimated remaining time: 1 minute, 25 seconds.
+Predicting.. Progress: 14%. Estimated remaining time: 6 minutes, 33 seconds.
+Aggregating predictions.. Progress: 71%. Estimated remaining time: 1 minute, 15 seconds.
+Predicting.. Progress: 20%. Estimated remaPredicting.. Progress: 46%. EstimatAggregating predictions.. Progress: 79%. Predicting.. Progress: 60%. Estimated remaining time: 2 minutes, 4 seconds.
+Predicting.. Progress: 75%. Estimated remaining time: 1 minute, 13 seconds.
+Predicting.. Progress: 91%. Estimated remaining time: 23 seconds.
+AggrePredicting.. Progress: 14%. Estimated remaining time: 3 minutes, 10 seconds.
+Predicting.. Progress: 35%. Estimated remaining time: 1 minute, 56 seconds.
 Predicting.. Progress: 56%. Estimated remaining time: 1 minute, 14 seconds.
-Predicting.. Progress: 76%. Estimated remaining time: 39 seconds.
-Predicting.. Progress: 99%. Estimated remaining time: 2 seconds.
-Aggregating predictions.. Progress: 28%. Estimated remaining time: 1 minute, 20 seconds.
-Aggregating predictions.. Progress: 55%. Estimated remaining time: 50 seconds.
-Aggregating predictions.. Progress: 83%. Estimated remaining time: 19 seconds.
-Predicting.. Progress: 16%. Estimated remaining time: 2 minutes, 40 seconds.
-Predicting.. Progress: 32%. Estimated remaining time: 2 minutes, 9 seconds.
-Predicting.. Progress: 51%. Estimated remaining time: 1 minute, 28 seconds.
-Predicting.. Progress: 70%. Estimated remaining time: 53 seconds.
-Predicting.. Progress: 87%. Estimated remaining time: 22 seconds.
-Aggregating predictions.. Progress: 31%. Estimated remaining time: 1 minute, 9 seconds.
-Aggregating predictions.. Progress: 62%. Estimated remaining time: 38 seconds.
-Aggregating predictions.. Progress: 93%. Estimated remaining time: 7 seconds.
+Predicting.. Progress: 76%. Estimated remaining time: 38 seconds.
+Predicting.. Progress: 97%. EstimatePredicting.. Progress: 14%. Estimated remaining time: 3 minutes, 16 seconds.
+Predicting.. Progress: 34%. Estimated remaining time: 2 minutes, 4 seconds.
+Predicting.. Progress: 54%. Estimated remaining time: 1 minute, 19 seconds.
+Predicting.. Progress: 74%. Estimated remaining time: 45 seconds.
+Predicting.. Progress: 92%. Estimated remaining time: 12 seconds.
+Aggregating predictions.. Progress: 24%. Estimated remaining time: 1 minute, 39 seconds.
+Aggregating predictions.. Progress: 47%. Estimated remaining time: 1 minute, 10 seconds.
+Aggregating predictions.. Progress: 70%. Estimated remaining time: 39 seconds.
+Aggregating predictions.. Progress: 94%. Estimated remaining time: 8 seconds.
+Predicting.. Progress: 11%. Estimated remaining time: 4 minutes, 21 seconds.
+Predicting.. Progress: 31%. Estimated remaining time: 2 minutes, 22 seconds.
+Predicting.. Progress: 47%. Estimated remaining time: 1 minute, 52 seconds.
+Predicting.. Progress: 64%. Estimated remaining time: 1 minute, 13 seconds.
+Predicting.. Progress: 79%. Estimated remainingPredicting.. Progress: 15%. Estimated remaining time: 2 minutes, 50 seconds.
+Predicting.. Progress: 35%. Estimated remaining time: 1 minute, 54 seconds.
+Predicting.. Progress: 56%. Estimated remaining time: 1 minute, 14 seconds.
+Predicting.. Progress: 77%. Estimated remaining time: 38 seconds.
+Predicting.. Progress: 97%. Estimated remaining time: 4 seconds.
+Aggregating predictions.. Progress: 25%. Estimated remainingPredicting.. Progress: 15%. Estimated remaining time: 3 minutes, 1 seconds.
+Predicting.. Progress: 35%. Estimated remaining time: 1 minute, 54 seconds.
+Predicting.. Progress: 56%. Estimated remainPredicting.. Progress: 11%. Estimated remaining time: 4 minutes, 8 seconds.
+Predicting.. Progress: 31%. Estimated remaining time: 2 minutes, 18 seconds.
+Predicting.. Progress: 47%. Estimated remaining time: 1 minute, 45 seconds.
+Predicting.. Progress: 62%. Estimated remaining time: 1 minute, 15 seconds.
+Predicting.. Progress: 80%. Estimated remaining time: 38 seconds.
+Aggregating predictions.. Progress: 27%. Estimated remaining time: 1 minute, 25 seconds.
+Aggregating predictions.. Progress: 54%. Estimated remaining time: 53 seconds.
+Aggregating predictions.. Progress: 80%. Estimated remaining time: 22 seconds.
+Predicting.. Progress: 15%. Estimated remaining time: 3 minutes, 13 seconds.
+Predicting.. Progress: 36%. Estimated remaining time: 2 minutes, 0 seconds.
+Predicting.. Progress: 56%. Estimated remaining time: 1 minute, 19 seconds.
+Predicting.. Progress: 73%. Estimated remaining time: 47 seconds.
+Predicting.. Progress: 93%. Estimated remaining time: 11 seconds.
+Aggregating predictions.. Progress: 24%. Estimated remaining time: 1 minute, 35 seconds.
+Aggregating predictions.. Progress: 49%. EstimaPredicting.. Progress: 13%. Estimated remaining time: 3 minutes, 35 seconds.
+Predicting.. Progress: 31%. Estimated remaining time: 2 minutes, 19 seconds.
+Predicting.. Progress: 48%. Estimated remainPredicting.. Progress: 12%. Estimated remaining time: 3 minutes, 47 seconds.
+Predicting.. Progress: 29%. Estimated remaining time: 2 minutes, 28 seconds.
+Predicting.. Progress: 44%. Estimated remaining time: 2 minutes, 0 seconds.
+Predicting.. Progress: 60%. Estimated remaining time: 1 minute, 21 seconds.
+Predicting.. Progress: 76%. Estimated remaining time: 47 seconds.
+Predicting.. Progress: 94%. Estimated remaining time: 11 seconds.
+Aggregating predictions.. Progress: 27%. Estimated remaining time: 1 miPredicting.. Progress: 11%. Estimated remaining time: 4 minutes, 5 seconds.
+Predicting.. Progress: 26%. Estimated remaining time: 2 minutes, 59 seconds.
+Predicting.. Progress: Predicting.. Progress: 13%. Estimated remaining time: Predicting.. Progress: Predicting.. Progress: 33%. Estimated remaining time:Predicting.. Progress: Predicting.. Progress: 53%. Estimated remaiPredicting.. Progress: 88%. EstimPredicting.. Progress: 72%. EstimAggregating predictions.. ProgresPredicting.. Progress: 91%. Estimated remaining time: 14AggregatinAggregating predictions.. Progress: 25%. Estimated remaining time: 1 Aggregating predictiAggregating predictions.. Progress: 50%. Estimated remaininPredicting.. Progress: 13%. Estimated remaining time: 3 minutes, 31 seconds.
+Predicting.. Progress: 33%. Estimated remaining time: 2 minutes, 9 seconds.
+Predicting.. Progress: 50%. EstimaPredicting.. Progress: 14%. Estimated remaining time: 3 minutes, 16 seconds.
+Predicting.. Progress: 30%. Estimated remaining time: 2 minutes, 27 seconds.
+Predicting.. ProgresAggregating predictions.. Progress: 23%. Estimated remaiPredicting.. Progress: 64%. EstimAggregating predictions.. Progress: 46%. EsPredicting.. Progress: 80%. Estimated remaininAggregating predictiAggregating predictions.. Progress: 29%. Estimated remaining time: 1 minute, 15 seconds.
+Aggregating predictions.. Progress: 58%.PredictinPredicting.. Progress: 13%. Estimated remaining time: 3 minutes, 35 seconds.
+Predicting.. Progress: 29%. Estimated remaining time: 2 minutes, 31 seconds.
+Predicting.. Progress: 45%. Estimated remaining time: 1 minute, 54 seconds.
+Predicting.. Progress: 62%. Estimated remaining time: 1 minute, 17 seconds.
+Predicting.. Progress: 77%. Estimated remaining time: 45 seconds.
+Predicting.. Progress: 94%. Estimated remaining time: 12 seconds.
+Aggregating predictions.. Progress: 29%. Estimated remaining time: 1 minute, 14 seconds.
+Aggregating predictions.. Progress: 58%. Estimated remaining time: 44 seconds.
+Aggregating predictions.. Progress: 87%. Estimated remaining time: 13 seconds.
 [[1]]
 NULL
 
@@ -248,46 +228,18 @@ NULL
 > 
 > proc.time()
     user   system  elapsed 
-3138.324  136.894 3548.933 
-remaining time: 16 seconds.
-[[1]]
-NULL
-
-[[2]]
-NULL
-
-> 
-> proc.time()
-    user   system  elapsed 
-3333.249  137.759 3751.163 
-ess: 57%. Estimated remaining time: 46 seconds.
-Aggregating predictions.. Progress: 86%. Estimated remaining time: 15 seconds.
-Predicting.. Progress: 15%. Estimated remaining time: 3 minutes, 1 seconds.
-Predicting.. Progress: 34%. Estimated remaining time: 2 minutes, 7 seconds.
-Predicting.. Progress: 53%. Estimated remaining time: 1 minute, 26 seconds.
-Predicting.. Progress: 70%. Estimated remaining time: 53 seconds.
-Predicting.. Progress: 89%. Estimated remaining time: 18 seconds.
-Aggregating predictions.. Progress: 30%. Estimated remaining time: 1 minute, 13 seconds.
-Aggregating predictions.. Progress: 59%. Estimated remaining time: 43 seconds.
-Aggregating predictions.. Progress: 89%. Estimated remaining time: 12 seconds.
-[[1]]
-NULL
-
-[[2]]
-NULL
-
-> 
-> proc.time()
-    user   system  elapsed 
-3087.099  222.938 3514.231 
-predictions.. Progress: 92%. Estimated remaining time: 8 seconds.
-[[1]]
-NULL
-
-[[2]]
-NULL
-
-> 
-> proc.time()
-    user   system  elapsed 
-3075.675  165.701 3651.047 
+3349.675  160.589 3911.803 
+ng predictions.. ProgAggregating predictions.. Progress: 28%. EstimatePredicting.. Progress: 13%. Estimated remaining time: 4 minutes, 2 seconds.
+Predicting.. Progress: 29%. Estimated remaining time: 2 minutes, 38 seconds.
+Predicting.. Progress: 46%. Estimated remaining time: 1 minute, 55 seconds.
+Predicting.. Progress: 64%Predicting.. Progress: 14%. Estimated remaining tiPredicting.. Progress: 79%.Predicting.. Progress: 30%. Estimated rPredicting.. Progress: 98%. Estimated Predicting.. Progress: 45%.Aggregating predictions.. Progress: 16%. Estimated remaining time: 2 minutes, 37 seconds.
+Aggregating predictions.. Progress: 33%. Estimated remaining time: 2 minutes, 5 seconds.
+Aggregating Predicting.. Progress: 96%. Estimated remaining time: 8 seconds.
+Aggregating predictions.. Progress: 17%. Estimated remaining time: 2 minutes, 34 seconds.
+Aggregating predictions.. Progress: 33%. Estimated remaining time: 2 minutes, 3 seconds.
+Aggregating predictions.. Progress: 50%. Estimated remaining time: 1 minute, 3Predicting.. Progress: 11%. Estimated remaining time: 4 minutes, 10 seconds.
+Predicting.. Progress: 26%. Estimated remaining time: 2 minutes, 54 seconds.
+Predicting.. Progress: 4Predicting.. Progress: 11%. Estimated remaining time:Predicting.. Progress: 5Predicting.. Progress: 26%. Estimated remaining timePredicting.. Progress: 7Predicting.. Progress: 40%. Estimated remaining timPredicting.. Progress: 84%Predicting.. Progress: 56%. Estimated reAggregating predictions.. Progress: 20%. Estimated remaining time: 2 minutes, 6 seconds.
+ 1 minute, 5 seconds.
+ated remaining time: 7 seconds.
+Aggregating predictions.. Progress: 21%. Estimated remaining time: 1 minute, 53 seconds.

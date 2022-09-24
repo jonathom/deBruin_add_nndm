@@ -17,7 +17,6 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> index_ <- 1
 > # *****************************************************************************
 > # R Script implementing conventional random f-fold cross-validation.  
 > # Related to the paper "Dealing with clustered samples for assessing map 
@@ -47,11 +46,11 @@ Loading required package: lattice
 > library(parallel)
 > 
 > # ************ GLOBALS ***************
-> infolder <- "~/deBruin_add_nndm/10_experimental_samples/samples/sampled_3000"
+> infolder <- "~/deBruin_add_nndm/10_experimental_samples/samples/sampled_1000"
 > outfolder <- "~/deBruin_add_nndm/10_experimental_samples/CVresults/"
 > # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults"
 > datafolder <- "~/deBruin_add_nndm/data"
-> folder_name <- "nndm_sampled3000_samps_1000_mint_0"
+> folder_name <- "nndm_sampled1000_samps_1000_mint_0"
 > 
 > n_CV <- 1
 > 
@@ -185,16 +184,21 @@ Loading required package: lattice
 > samples <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular", 
 +                "simpleRandom")
 > n_samp <- 10
+> cores <- 20
 > 
-> lapply(list("AGB", "OCS"), function(var_) {
-+   for(smpl in samples) {
-+     nndmCV(smpl = smpl, number = index_, variate = var_)
-+   }
+> # mclapply(seq(n_samp), function(i) {
+> # 4 is missing from all results so redo run nr 4
+> # mclapply(list(4), function(i) {
+> #   for(smpl in samples) {
+> #     nndmCV(smpl = smpl, number = i, variate = "AGB")
+> #     nndmCV(smpl, i, "OCS")
+> #   }
+> # }, mc.cores = cores)
+> 
+> # do one first
+> lapply(samples, function(smpl) {
++   nndmCV(smpl=smpl, number=1, variate="OCS")
 + })
 1000 prediction points are sampled from the modeldomain
 Spherical geometry (s2) switched off
-tpoints and ppoints must have the same CRS. tpoints have been transformed.
-1000 prediction points are sampled from the modeldomain
-tpoints and ppoints must have the same CRS. tpoints have been transformed.
-1000 prediction points are sampled from the modeldomain
 tpoints and ppoints must have the same CRS. tpoints have been transformed.

@@ -173,5 +173,5 @@ cores <- 20
 
 # do one first
 lapply(samples, function(smpl) {
-  nndmCV(smpl=smpl, number=1, variate="AGB")
+  nndmCV(smpl=smpl, number=1, variate="OCS")
 })
