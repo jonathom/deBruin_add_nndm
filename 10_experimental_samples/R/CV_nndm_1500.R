@@ -26,7 +26,7 @@ infolder <- "~/deBruin_add_nndm/10_experimental_samples/samples/sampled_1500"
 outfolder <- "~/deBruin_add_nndm/10_experimental_samples/CVresults/"
 # outfolder <- "~/iloek_job/wadoux/investigate_spatial_validation/debruin/CVresults"
 datafolder <- "~/deBruin_add_nndm/data"
-folder_name <- "nndm_sampled1000_samps_1500_mint_0"
+folder_name <- "nndm_sampled1500_samps_1000_mint_0"
 
 n_CV <- 1
 

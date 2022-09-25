@@ -160,13 +160,12 @@ nndmCV <- function(smpl, number, variate) {
 samples <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular", 
                "simpleRandom")
 n_samp <- 10
-cores <- 20
+cores <- 2
 
 # mclapply(seq(n_samp), function(i) {
 # 4 is missing from all results so redo run nr 4
-mclapply(list(4), function(i) {
+mclapply(c("AGB", "OCS"), function(vari_) {
   for(smpl in samples) {
-    nndmCV(smpl = smpl, number = i, variate = "AGB")
-    nndmCV(smpl, i, "OCS")
+    nndmCV(smpl = smpl, number = 4, variate = vari_)
   }
 }, mc.cores = cores)

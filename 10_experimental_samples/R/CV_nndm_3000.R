@@ -162,8 +162,9 @@ samples <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular",
                "simpleRandom")
 n_samp <- 10
 
-lapply(list("AGB", "OCS"), function(var_) {
-  for(smpl in samples) {
-    nndmCV(smpl = smpl, number = index_, variate = var_)
-  }
-})
+#lapply(list("AGB"), function(var_) {
+#  for(smpl in samples) {
+#    nndmCV(smpl = smpl, number = index_, variate = var_)
+#  }
+#})
+nndmCV("clusterStrong", 1, "AGB")

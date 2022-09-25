@@ -184,20 +184,20 @@ Loading required package: lattice
 > samples <- c("clusterMedium", "clusterStrong", "clusterGapped", "regular", 
 +                "simpleRandom")
 > n_samp <- 10
-> cores <- 20
+> cores <- 2
 > 
 > # mclapply(seq(n_samp), function(i) {
 > # 4 is missing from all results so redo run nr 4
-> mclapply(list(4), function(i) {
+> mclapply(c("AGB", "OCS"), function(vari_) {
 +   for(smpl in samples) {
-+     nndmCV(smpl = smpl, number = i, variate = "AGB")
-+     nndmCV(smpl, i, "OCS")
++     nndmCV(smpl = smpl, number = 4, variate = vari_)
 +   }
 + }, mc.cores = cores)
 1000 prediction points are sampled from the modeldomain
+1000 prediction points are sampled from the modeldomain
+Spherical geometry (s2) switched off
 Spherical geometry (s2) switched off
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
-1000 prediction points are sampled from the modeldomain
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
 1000 prediction points are sampled from the modeldomain
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
@@ -218,8 +218,10 @@ tpoints and ppoints must have the same CRS. tpoints have been transformed.
 [[1]]
 NULL
 
-There were 30 warnings (use warnings() to see them)
+[[2]]
+NULL
+
 > 
 > proc.time()
     user   system  elapsed 
-7321.820  232.977 3914.897 
+2773.073   66.166 2851.074 
