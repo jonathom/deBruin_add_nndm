@@ -80,3 +80,42 @@ Job Wall-clock time: 14:33:18
 Memory Utilized: 1.86 GB
 Memory Efficiency: 4.66% of 40.00 GB
 ###############################################################################
+################################# JOB REPORT ##################################
+Job ID: 12490831
+Cluster: palma2
+User/Group: j_bahl03/u0dawin
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 1-06:34:33
+CPU Efficiency: 99.55% of 1-06:42:52 core-walltime
+Job Wall-clock time: 15:21:26
+Memory Utilized: 1.82 GB
+Memory Efficiency: 4.56% of 40.00 GB
+###############################################################################
+################################# JOB REPORT ##################################
+Job ID: 12490836
+Cluster: palma2
+User/Group: j_bahl03/u0dawin
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 1-09:43:25
+CPU Efficiency: 99.65% of 1-09:50:32 core-walltime
+Job Wall-clock time: 16:55:16
+Memory Utilized: 1.85 GB
+Memory Efficiency: 4.63% of 40.00 GB
+###############################################################################
+################################# JOB REPORT ##################################
+Job ID: 12490840
+Cluster: palma2
+User/Group: j_bahl03/u0dawin
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 2
+CPU Utilized: 1-11:46:44
+CPU Efficiency: 99.75% of 1-11:52:04 core-walltime
+Job Wall-clock time: 17:56:02
+Memory Utilized: 1.85 GB
+Memory Efficiency: 4.62% of 40.00 GB
+###############################################################################
