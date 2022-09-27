@@ -174,6 +174,6 @@ cores <- 20
 # do one first
 mclapply(c("AGB", "OCS"), function(vari) {
   for (smpl in samples) {
-    nndmCV(smpl=smpl, number=1, variate=vari)
+    nndmCV(smpl=smpl, number=10, variate=vari)
   }
 }, mc.cores=2)

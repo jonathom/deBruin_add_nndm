@@ -195,3 +195,13 @@ Loading required package: lattice
 1000 prediction points are sampled from the modeldomain
 Spherical geometry (s2) switched off
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
+Warning messages:
+1: In showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj = prefer_proj) :
+  Discarded datum Unknown based on GRS80 ellipsoid in Proj4 definition
+2: In proj4string(obj) : CRS object has comment, which is lost in output
+3: In nominalTrainWorkflow(x = x, y = y, wts = weights, info = trainInfo,  :
+  There were missing values in resampled performance measures.
+> 
+> proc.time()
+     user    system   elapsed 
+131495.13  19554.07 149184.62 

@@ -198,7 +198,7 @@ Loading required package: lattice
 > # do one first
 > mclapply(c("AGB", "OCS"), function(vari) {
 +   for (smpl in samples) {
-+     nndmCV(smpl=smpl, number=1, variate=vari)
++     nndmCV(smpl=smpl, number=10, variate=vari)
 +   }
 + }, mc.cores=2)
 1000 prediction points are sampled from the modeldomain
@@ -206,4 +206,30 @@ Loading required package: lattice
 Spherical geometry (s2) switched off
 Spherical geometry (s2) switched off
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
+tpoints and ppoints must have the same CRS. tpoints have been transformed.1000 prediction points are sampled from the modeldomain
 tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+1000 prediction points are sampled from the modeldomain
+tpoints and ppoints must have the same CRS. tpoints have been transformed.
+[[1]]
+NULL
+
+[[2]]
+NULL
+
+> 
+> 
+> proc.time()
+      user     system    elapsed 
+102587.692   1907.175  52391.943 
